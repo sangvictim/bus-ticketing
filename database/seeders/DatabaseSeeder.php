@@ -13,6 +13,7 @@ use App\Models\Seat;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use KodePandai\Indonesia\IndonesiaDatabaseSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -22,6 +23,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // \App\Models\User::factory(10)->create();
+        $this->call(IndonesiaDatabaseSeeder::class);
 
         $permission =
             [

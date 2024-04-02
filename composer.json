@@ -11,6 +11,7 @@
         "php": "^8.2",
         "filament/filament": "^3.2",
         "flowframe/laravel-trend": "^0.2.0",
+        "kodepandai/laravel-indonesia": "^2.0",
         "laravel/framework": "^11.0",
         "laravel/tinker": "^2.9",
         "leandrocfe/filament-apex-charts": "^3.1",
