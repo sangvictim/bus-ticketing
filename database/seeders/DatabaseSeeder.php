@@ -128,5 +128,8 @@ class DatabaseSeeder extends Seeder
             $classes = Classes::all()->random(3)->pluck('id');
             $armada->classes()->attach($classes);
         });
+
+        // $agentOfCity = file_get_contents(__DIR__ . '/list-agen.json');
+        // $agentOfCity = json_decode($agentOfCity);
     }
 }
