@@ -11,14 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('destinations', function (Blueprint $table) {
+        Schema::create('agents', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('city_id');
-            $table->unsignedBigInteger('district_id');
+            $table->foreign('city_id')->references('id')->on('cities');
             $table->string('name');
-            $table->text('address');
-            $table->text('description');
-            $table->string('telp');
+            $table->string('address');
             $table->boolean('isActive')->default(1);
             $table->timestamps();
         });
@@ -29,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('destinations');
+        Schema::dropIfExists('agents');
     }
 };

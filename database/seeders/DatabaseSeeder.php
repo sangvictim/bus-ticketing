@@ -2,18 +2,17 @@
 
 namespace Database\Seeders;
 
+use App\Models\Agent;
 use App\Models\Armada;
-use App\Models\ClassArmada;
+use App\Models\City;
 use App\Models\Classes;
 use App\Models\Facility;
 use App\Models\Permission;
-use App\Models\Product;
 use App\Models\Role;
 use App\Models\Seat;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use KodePandai\Indonesia\IndonesiaDatabaseSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -23,8 +22,6 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // \App\Models\User::factory(10)->create();
-        $this->call(IndonesiaDatabaseSeeder::class);
-
         $permission =
             [
                 "*",
@@ -129,7 +126,23 @@ class DatabaseSeeder extends Seeder
             $armada->classes()->attach($classes);
         });
 
-        // $agentOfCity = file_get_contents(__DIR__ . '/list-agen.json');
-        // $agentOfCity = json_decode($agentOfCity);
+
+        /**
+         * seeder untuk kota dan agen
+         */
+        $agentOfCity = file_get_contents(__DIR__ . '/list-agen.json');
+        $agentOfCity = json_decode($agentOfCity);
+        foreach ($agentOfCity as $key => $value) {
+            City::factory()->create([
+                'name' => $value->text,
+            ]);
+            foreach ($value->children as $val) {
+                Agent::factory()->create([
+                    'city_id' => City::where('name', $value->text)->first()->id,
+                    'name' => $val->name,
+                    'address' => $val->text
+                ]);
+            }
+        }
     }
 }
