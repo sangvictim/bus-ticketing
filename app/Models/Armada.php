@@ -23,4 +23,9 @@ class Armada extends Model
     {
         return $this->belongsToMany(Classes::class);
     }
+
+    public function routes(): BelongsToMany
+    {
+        return $this->belongsToMany(Route::class);
+    }
 }

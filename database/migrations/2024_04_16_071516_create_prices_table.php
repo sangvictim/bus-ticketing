@@ -15,7 +15,13 @@ return new class extends Migration
             $table->id();
             $table->foreignId('route_id')->references('id')->on('routes');
             $table->foreignId('class_id')->references('id')->on('classes');
+            $table->string('name');
             $table->string('price');
+            $table->string('cut_of_price')->nullable();
+            $table->string('discount')->nullable();
+            $table->string('discount_type')->nullable();
+            $table->dateTime('start_date')->nullable();
+            $table->dateTime('end_date')->nullable();
             $table->timestamps();
         });
     }

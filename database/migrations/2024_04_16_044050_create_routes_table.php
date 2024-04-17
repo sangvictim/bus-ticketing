@@ -14,8 +14,10 @@ return new class extends Migration
         Schema::create('routes', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->foreignId('destination_city')->references('id')->on('cities');
             $table->foreignId('origin_city')->references('id')->on('cities');
+            $table->foreignId('destination_city')->references('id')->on('cities');
+            $table->integer('estimated_duration')->nullable();
+            $table->boolean('isActive')->default(1);
             $table->timestamps();
         });
     }
