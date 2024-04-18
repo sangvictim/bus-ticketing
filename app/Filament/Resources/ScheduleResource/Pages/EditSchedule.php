@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Filament\Resources\ArmadaResource\Pages;
+namespace App\Filament\Resources\ScheduleResource\Pages;
 
-use App\Filament\Resources\ArmadaResource;
+use App\Filament\Resources\ScheduleResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 
-class EditArmada extends EditRecord
+class EditSchedule extends EditRecord
 {
-    protected static string $resource = ArmadaResource::class;
+    protected static string $resource = ScheduleResource::class;
 
     protected function getHeaderActions(): array
     {

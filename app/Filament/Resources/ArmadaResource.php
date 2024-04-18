@@ -2,23 +2,22 @@
 
 namespace App\Filament\Resources;
 
-use App\Enums\ArmadaStatus;
 use App\Filament\Resources\ArmadaResource\Pages;
-use App\Filament\Resources\ArmadaResource\RelationManagers;
 use App\Models\Armada;
-use Filament\Forms;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Infolists\Components\Section as ComponentsSection;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class ArmadaResource extends Resource
 {
@@ -92,12 +91,39 @@ class ArmadaResource extends Resource
                 )
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                ActionGroup::make([
+                    Tables\Actions\ViewAction::make(),
+                    Tables\Actions\EditAction::make(),
+
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
+            ]);
+    }
+
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                ComponentsSection::make('Armada')->schema([
+                    TextEntry::make('code')->label('Kode'),
+                    TextEntry::make('name')->label('Nama'),
+                    TextEntry::make('classes.name')->label('Kelas'),
+                    TextEntry::make('capacity')->label('Kapasitas')->suffix(' Seat'),
+                    TextEntry::make('manufacturer')->label('Pabrikan'),
+                    TextEntry::make('production_year')->label('Tahun Produksi'),
+                    TextEntry::make('status')->label('Status'),
+                ])->columns(4),
+                ComponentsSection::make('Route and Schedule')->schema([
+                    TextEntry::make('routes.name')->label('Rute Armada'),
+                    TextEntry::make('routes.originCity.name')->label('Asal Trayek'),
+                    TextEntry::make('routes.destinationCity.name')->label('Tujuan Trayek'),
+                    TextEntry::make('schedules.arrival_time')->label('Waktu Kedatangan'),
+                    TextEntry::make('schedules.departure_time')->label('Waktu Keberangkatan'),
+                ])->columns(3),
             ]);
     }
 
@@ -113,6 +139,7 @@ class ArmadaResource extends Resource
         return [
             'index' => Pages\ListArmadas::route('/'),
             'create' => Pages\CreateArmada::route('/create'),
+            'view' => Pages\ViewArmada::route('/{record}'),
             'edit' => Pages\EditArmada::route('/{record}/edit'),
         ];
     }
