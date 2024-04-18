@@ -4,6 +4,8 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ClassesResource\Pages;
 use App\Filament\Resources\ClassesResource\RelationManagers;
+use App\Filament\Resources\ClassesResource\RelationManagers\FacilitiesRelationManager;
+use App\Filament\Resources\ClassesResource\RelationManagers\SeatsRelationManager;
 use App\Models\Classes;
 use App\Models\Facility;
 use Filament\Forms;
@@ -39,14 +41,14 @@ class ClassesResource extends Resource
         return $form
             ->schema([
                 TextInput::make('name'),
-                Section::make('Facilities')->schema([
-                    CheckboxList::make('facilities')->label('')->required()->relationship('facilities', 'name'),
+                // Section::make('Facilities')->schema([
+                //     CheckboxList::make('facilities')->label('')->required()->relationship('facilities', 'name'),
 
-                ]),
-                Section::make('Seats')->schema([
-                    CheckboxList::make('seats')->label('')->required()->relationship('seats', 'seat_number'),
+                // ]),
+                // Section::make('Seats')->schema([
+                //     CheckboxList::make('seats')->label('')->required()->relationship('seats', 'seat_number'),
 
-                ])
+                // ])
             ]);
     }
 
@@ -76,7 +78,8 @@ class ClassesResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            FacilitiesRelationManager::class,
+            SeatsRelationManager::class
         ];
     }
 

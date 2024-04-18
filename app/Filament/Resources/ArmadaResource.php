@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\ArmadaResource\Pages;
 use App\Models\Armada;
 use Filament\Forms\Components\CheckboxList;
+use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -15,6 +16,7 @@ use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
@@ -36,29 +38,31 @@ class ArmadaResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('code')
-                    ->required()
-                    ->maxLength(255),
-                TextInput::make('name')
-                    ->required()
-                    ->maxLength(255),
-                TextInput::make('manufacturer')
-                    ->required()
-                    ->maxLength(255),
-                TextInput::make('production_year')
-                    ->required()
-                    ->maxLength(255),
-                TextInput::make('capacity')
-                    ->required()
-                    ->maxLength(255),
-                Select::make('status')->options([
-                    'ACTIVE' => 'ACTIVE',
-                    'RESERVED' => 'RESERVED',
-                    'MAINTENANCE' => 'MAINTENANCE',
-                    'OFF' => 'OFF',
-                ]),
-                Section::make('Armada Class')->schema([
-                    CheckboxList::make('classes')->relationship('classes', 'name')->label(''),
+                Grid::make(3)->schema([
+                    TextInput::make('code')
+                        ->required()
+                        ->maxLength(255),
+                    TextInput::make('name')
+                        ->required()
+                        ->maxLength(255),
+                    TextInput::make('manufacturer')
+                        ->required()
+                        ->maxLength(255),
+                    TextInput::make('production_year')
+                        ->required()
+                        ->maxLength(255),
+                    TextInput::make('capacity')
+                        ->required()
+                        ->maxLength(255),
+                    Select::make('status')->options([
+                        'ACTIVE' => 'ACTIVE',
+                        'RESERVED' => 'RESERVED',
+                        'MAINTENANCE' => 'MAINTENANCE',
+                        'OFF' => 'OFF',
+                    ]),
+                    Section::make('Armada Class')->schema([
+                        CheckboxList::make('classes')->relationship('classes', 'name')->label(''),
+                    ])
                 ])
             ]);
     }
@@ -68,13 +72,25 @@ class ArmadaResource extends Resource
         return $table
             ->defaultSort('created_at', 'desc')
             ->columns([
+                IconColumn::make('status')
+                    ->icon(fn (string $state): string => match ($state) {
+                        'RESERVED' => 'heroicon-o-clock',
+                        'MAINTENANCE' => 'heroicon-o-cog-8-tooth',
+                        'ACTIVE' => 'heroicon-o-check-circle',
+                        'OFF' => 'heroicon-o-no-symbol',
+                    })
+                    ->color(fn (string $state): string => match ($state) {
+                        'MAINTENANCE' => 'info',
+                        'OFF' => 'warning',
+                        'ACTIVE' => 'success',
+                        'RESERVED' => 'gray',
+                    }),
                 TextColumn::make('code')->searchable(),
                 TextColumn::make('production_year')->searchable()->sortable(),
                 TextColumn::make('name')->searchable()
                     ->description(fn ($record) => $record->manufacturer),
 
                 TextColumn::make('capacity')->searchable(),
-                TextColumn::make('status'),
             ])
             ->filters([
                 SelectFilter::make('status')->options([

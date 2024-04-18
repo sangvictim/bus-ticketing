@@ -17,6 +17,8 @@ return new class extends Migration
             $table->foreign('city_id')->references('id')->on('cities');
             $table->string('name');
             $table->string('address');
+            $table->string('contact_name');
+            $table->string('mobile_phone');
             $table->boolean('isActive')->default(1);
             $table->timestamps();
         });

@@ -19,6 +19,8 @@ class AgentFactory extends Factory
         return [
             'name' => fake()->name(),
             'address' => fake()->address(),
+            'contact_name' => fake()->name(),
+            'mobile_phone' => fake()->phoneNumber(),
         ];
     }
 }

@@ -14,6 +14,8 @@ class Agent extends Model
         'city_id',
         'name',
         'address',
+        'contact_name',
+        'mobile_phone',
         'isActive',
     ];
 
