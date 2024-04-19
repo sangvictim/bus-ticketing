@@ -24,11 +24,6 @@ class Armada extends Model
         return $this->belongsToMany(Classes::class);
     }
 
-    public function routes()
-    {
-        return $this->belongsToMany(Route::class);
-    }
-
     public function schedules()
     {
         return $this->hasMany(Schedule::class, 'armada_id', 'id');

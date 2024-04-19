@@ -3,7 +3,6 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\RouteResource\Pages;
-use App\Filament\Resources\RouteResource\RelationManagers\ArmadasRelationManager;
 use App\Models\City;
 use App\Models\Route;
 use Filament\Forms\Components\Select;
@@ -69,7 +68,7 @@ class RouteResource extends Resource
     public static function getRelations(): array
     {
         return [
-            ArmadasRelationManager::class
+            //
         ];
     }
 

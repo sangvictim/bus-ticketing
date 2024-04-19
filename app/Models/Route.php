@@ -37,9 +37,4 @@ class Route extends Model
 
         return $jam . 'h' . ' ' . $sisaMenit . 'm';
     }
-
-    public function armada(): BelongsToMany
-    {
-        return $this->belongsToMany(Armada::class);
-    }
 }

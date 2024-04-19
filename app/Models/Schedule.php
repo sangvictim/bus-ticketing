@@ -13,6 +13,8 @@ class Schedule extends Model
     protected $fillable = [
         'route_id',
         'armada_id',
+        'price_id',
+        'classes_id',
         'departure_time',
         'arrival_time',
     ];
@@ -25,5 +27,15 @@ class Schedule extends Model
     public function armada(): BelongsTo
     {
         return $this->belongsTo(Armada::class);
+    }
+
+    public function price(): BelongsTo
+    {
+        return $this->belongsTo(Price::class);
+    }
+
+    public function classes(): BelongsTo
+    {
+        return $this->belongsTo(Classes::class);
     }
 }

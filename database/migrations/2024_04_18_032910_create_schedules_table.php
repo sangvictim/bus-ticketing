@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('route_id')->constrained('routes');
             $table->foreignId('armada_id')->constrained('armadas');
+            $table->foreignId('price_id')->constrained('prices');
+            $table->foreignId('classes_id')->constrained('prices');
             $table->time('departure_time');
             $table->time('arrival_time');
             $table->timestamps();

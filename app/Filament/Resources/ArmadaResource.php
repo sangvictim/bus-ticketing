@@ -132,14 +132,7 @@ class ArmadaResource extends Resource
                     TextEntry::make('manufacturer')->label('Pabrikan'),
                     TextEntry::make('production_year')->label('Tahun Produksi'),
                     TextEntry::make('status')->label('Status'),
-                ])->columns(4),
-                ComponentsSection::make('Route and Schedule')->schema([
-                    TextEntry::make('routes.name')->label('Rute Armada'),
-                    TextEntry::make('routes.originCity.name')->label('Asal Trayek'),
-                    TextEntry::make('routes.destinationCity.name')->label('Tujuan Trayek'),
-                    TextEntry::make('schedules.arrival_time')->label('Waktu Kedatangan'),
-                    TextEntry::make('schedules.departure_time')->label('Waktu Keberangkatan'),
-                ])->columns(3),
+                ])->columns(4)
             ]);
     }
 
