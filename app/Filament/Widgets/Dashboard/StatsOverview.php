@@ -2,6 +2,10 @@
 
 namespace App\Filament\Widgets\Dashboard;
 
+use App\Models\Agent;
+use App\Models\Armada;
+use App\Models\Classes;
+use App\Models\Route;
 use App\Models\User;
 use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
@@ -16,14 +20,21 @@ class StatsOverview extends StatsOverviewWidget
     {
         return [
             Stat::make(
-                label: 'Total User',
-                value: User::query()->count(),
+                label: 'Trayek',
+                value: Route::query()->count(),
             ),
             Stat::make(
-                label: 'Rate',
-                value: '3:12',
+                label: 'Agen',
+                value: Agent::query()->count(),
             ),
-            Stat::make('Average time on page', '3:12')->chart([7, 2, 10, 3, 15, 4, 17])->color('success'),
+            Stat::make(
+                label: 'Armada',
+                value: Armada::query()->count(),
+            ),
+            Stat::make(
+                label: 'Kelas Armada',
+                value: Classes::query()->count(),
+            ),
         ];
     }
 }
