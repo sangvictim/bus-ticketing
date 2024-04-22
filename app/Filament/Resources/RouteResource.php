@@ -35,9 +35,9 @@ class RouteResource extends Resource
         return $form
             ->schema([
                 TextInput::make('name')->required(),
-                Select::make('origin_city')->options(City::all()->pluck('name', 'id')->toArray())
+                Select::make('origin_city')->relationship('originCity', 'name')
                     ->required()->searchable()->preload(),
-                Select::make('destination_city')->options(City::all()->pluck('name', 'id')->toArray())
+                Select::make('destination_city')->relationship('destinationCity', 'name')
                     ->required()->searchable()->preload(),
                 TextInput::make('estimated_duration')->numeric()->suffix('minutes')->minValue(0),
                 Toggle::make('isActive')->default(1),
@@ -55,8 +55,8 @@ class RouteResource extends Resource
                 TextColumn::make('estimated'),
             ])
             ->filters([
-                SelectFilter::make('origin_city')->label('Origin')->options(City::all()->pluck('name', 'id')->toArray()),
-                SelectFilter::make('destination_city')->label('Destination')->options(City::all()->pluck('name', 'id')->toArray()),
+                SelectFilter::make('origin_city')->label('Origin')->relationship('originCity', 'name')->preload(),
+                SelectFilter::make('destination_city')->label('Destination')->relationship('destinationCity', 'name')->preload(),
             ])
             ->actions([
                 ActionGroup::make([

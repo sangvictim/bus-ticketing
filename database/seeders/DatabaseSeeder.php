@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Admin;
 use App\Models\Agent;
 use App\Models\Armada;
 use App\Models\City;
@@ -37,28 +38,30 @@ class DatabaseSeeder extends Seeder
         for ($i = 0; $i < count($permission); $i++) {
             Permission::factory()->create([
                 'name' => $permission[$i],
-                'guard_name' => 'web'
+                'guard_name' => 'admin'
             ]);
         }
 
         for ($i = 0; $i < count($role); $i++) {
             Role::factory()->create([
                 'name' => $role[$i],
-                'guard_name' => 'web'
+                'guard_name' => 'admin'
             ])->givePermissionTo('*');
         }
 
-        User::factory()->create([
+        Admin::factory()->create([
             'name' => 'Super Admin',
             'email' => 'admin@mail.com',
             'password' => bcrypt(123), //123
         ])->assignRole(1);
 
-        User::factory()->create([
+        Admin::factory()->create([
             'name' => 'Admin',
             'email' => 'user@mail.com',
             'password' => bcrypt(123), //123
         ])->assignRole(2);
+
+        User::factory(10)->create();
 
         Armada::factory(50)->create();
 
