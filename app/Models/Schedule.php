@@ -13,8 +13,6 @@ class Schedule extends Model
     protected $fillable = [
         'route_id',
         'armada_id',
-        'price_id',
-        'classes_id',
         'departure_time',
         'arrival_time',
     ];

@@ -11,8 +11,10 @@ use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
 class RouteResource extends Resource
@@ -47,21 +49,19 @@ class RouteResource extends Resource
         return $table
             ->columns([
                 IconColumn::make('isActive')->label('Active')->boolean(),
-                TextColumn::make('name'),
+                TextColumn::make('name')->searchable(),
                 TextColumn::make('originCity.name'),
                 TextColumn::make('destinationCity.name'),
                 TextColumn::make('estimated'),
             ])
             ->filters([
-                //
+                SelectFilter::make('origin_city')->label('Origin')->options(City::all()->pluck('name', 'id')->toArray()),
+                SelectFilter::make('destination_city')->label('Destination')->options(City::all()->pluck('name', 'id')->toArray()),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                ActionGroup::make([
+                    Tables\Actions\EditAction::make(),
+                ])
             ]);
     }
 

@@ -8,7 +8,10 @@ use App\Models\City;
 use App\Models\Classes;
 use App\Models\Facility;
 use App\Models\Permission;
+use App\Models\Price;
 use App\Models\Role;
+use App\Models\Route;
+use App\Models\Schedule;
 use App\Models\Seat;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -57,7 +60,7 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt(123), //123
         ])->assignRole(2);
 
-        Armada::factory(20)->create();
+        Armada::factory(50)->create();
 
         $fasilitas = [
             'Reclining Seat 1-1(2)',
@@ -143,6 +146,81 @@ class DatabaseSeeder extends Seeder
                     'address' => $val->text
                 ]);
             }
+        }
+
+        $routes = [
+            [
+                "name" => "TANGERANG - PEMALANG",
+                "origin_city" => 57,
+                "destination_city" => 42,
+                "estimated_duration" => 380
+            ],
+            [
+                "name" => "PEMALANG - TANGERANG",
+                "origin_city" => 42,
+                "destination_city" => 57,
+                "estimated_duration" => 380
+            ],
+            [
+                "name" => "TANGERANG - PURBALINGGA",
+                "origin_city" => 57,
+                "destination_city" => 47,
+                "estimated_duration" => 380
+            ],
+            [
+                "name" => "PURBALINGGA - TANGERANG",
+                "origin_city" => 47,
+                "destination_city" => 57,
+                "estimated_duration" => 380
+            ],
+            [
+                "name" => "TANGERANG - PURWOKERTO",
+                "origin_city" => 57,
+                "destination_city" => 48,
+                "estimated_duration" => 380
+            ],
+            [
+                "name" => "PURWOKERTO - TANGERANG",
+                "origin_city" => 48,
+                "destination_city" => 57,
+                "estimated_duration" => 380
+            ],
+            [
+                "name" => "TANGERANG - CILACAP",
+                "origin_city" => 57,
+                "destination_city" => 12,
+                "estimated_duration" => 380
+            ],
+            [
+                "name" => "CILACAP - TANGERANG",
+                "origin_city" => 12,
+                "destination_city" => 57,
+                "estimated_duration" => 380
+            ],
+        ];
+
+        foreach ($routes as $key => $value) {
+            Route::create($value);
+        }
+
+        $routes = Route::all();
+        $classes = Classes::all();
+        foreach ($routes as $key => $route) {
+            foreach ($classes as $key => $class) {
+                Price::factory()->create([
+                    'route_id' => $route->id,
+                    'class_id' => $class->id
+                ]);
+            }
+        }
+
+        foreach ($routes as $key => $value) {
+            Schedule::factory()->create([
+                'route_id' => $value->id,
+                'armada_id' => $key + 1,
+                'arrival_time' => '0' . ($key + 5) . ':00:00',
+                'departure_time' => '0' . ($key + 5) . ':15:00',
+            ]);
         }
     }
 }

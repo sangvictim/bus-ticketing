@@ -39,8 +39,6 @@ class ScheduleResource extends Resource
             ->schema([
                 Select::make('route_id')->relationship('route', 'name')->searchable()->preload()->required(),
                 Select::make('armada_id')->relationship('armada', 'code')->searchable()->preload()->required(),
-                Select::make('classes_id')->relationship('classes', 'name')->searchable()->preload()->required(),
-                Select::make('price_id')->relationship('price', 'price')->searchable()->preload()->required(),
                 TimePicker::make('arrival_time')->required(),
                 TimePicker::make('departure_time')->required(),
             ]);

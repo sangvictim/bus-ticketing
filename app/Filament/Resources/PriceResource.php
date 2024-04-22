@@ -48,7 +48,7 @@ class PriceResource extends Resource
                     TextInput::make('discount')->numeric()->minValue(0),
                     Select::make('discount_type')->options([
                         'percentage' => 'Percentage',
-                        'nominal' => 'Nominal',
+                        'amount' => 'Amount',
                     ])
                 ]),
                 DatePicker::make('start_date'),
