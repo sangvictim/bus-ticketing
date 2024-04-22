@@ -4,7 +4,6 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserResource\Pages;
 use App\Models\Admin;
-use App\Models\User;
 use Filament\Tables\Actions\EditAction;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\DateTimePicker;
@@ -22,7 +21,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class UserResource extends Resource
+class AdminResource extends Resource
 {
     protected static ?string $model = Admin::class;
 
@@ -32,7 +31,7 @@ class UserResource extends Resource
 
     public static function getNavigationGroup(): ?string
     {
-        return ('User Authorize');
+        return ('Administrator');
     }
 
     public static function form(Form $form): Form
@@ -116,10 +115,10 @@ class UserResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListUsers::route('/'),
-            'create' => Pages\CreateUser::route('/create'),
-            'view' => Pages\ViewUser::route('/{record}'),
-            'edit' => Pages\EditUser::route('/{record}/edit'),
+            'index' => Pages\ListAdmin::route('/'),
+            'create' => Pages\CreateAdmin::route('/create'),
+            'view' => Pages\ViewAdmin::route('/{record}'),
+            'edit' => Pages\EditAdmin::route('/{record}/edit'),
         ];
     }
 }

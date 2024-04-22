@@ -58,6 +58,12 @@ class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
-            ->authGuard('admin');
+            ->authGuard('admin')
+            ->navigationGroups([
+                'Manage Agents',
+                'Manage Armada',
+                'Manage Trayek',
+                'Administrator',
+            ]);
     }
 }

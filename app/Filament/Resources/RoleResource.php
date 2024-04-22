@@ -28,7 +28,7 @@ class RoleResource extends Resource
 
     public static function getNavigationGroup(): ?string
     {
-        return ('User Authorize');
+        return ('Administrator');
     }
 
     public static function form(Form $form): Form
