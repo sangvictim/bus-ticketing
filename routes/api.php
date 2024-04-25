@@ -24,7 +24,8 @@ Route::group([
     'prefix' => 'booking',
     'middleware' => 'auth:api'
 ], function ($router) {
-    Route::get('/schedules', [BookingController::class, 'index'])->name('schedules');
+    Route::get('/schedules', [BookingController::class, 'index']);
+    Route::get('/history', [BookingController::class, 'history']);
     // Route::get('/seat', [BookingController::class, 'index'])->name('seat');
     // Route::get('/payment', [BookingController::class, 'index'])->name('payment');
 });
