@@ -12,8 +12,15 @@ class BookingController extends Controller
     {
         $schedules = Route::where('origin_city', $request->origin_city)
             ->Where('destination_city', $request->destination_city)
-            ->with(['schedules' => function ($query) {
-                $query->with(['armada.classes']);
+            ->with(['schedules' => function ($query) use ($request) {
+                $query->whereHas('armada', function ($query) {
+                    $query->where('status', 'ACTIVE');
+                });
+                if ($request->class_id) {
+                    $query->whereHas('armada.classes', function ($query) use ($request) {
+                        $query->where('id', $request->class_id);
+                    });
+                }
                 $query->with(['armada.classes.price']);
             }])
             ->get();
