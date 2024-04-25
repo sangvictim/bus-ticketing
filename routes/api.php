@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\api\AuthController;
+use App\Http\Controllers\api\BookingController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,4 +18,13 @@ Route::group([
     Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:api')->name('logout');
     Route::post('/refresh', [AuthController::class, 'refresh'])->middleware('auth:api')->name('refresh');
     Route::get('/me', [AuthController::class, 'me'])->middleware('auth:api')->name('me');
+});
+
+Route::group([
+    'prefix' => 'booking',
+    'middleware' => 'auth:api'
+], function ($router) {
+    Route::get('/schedules', [BookingController::class, 'index'])->name('schedules');
+    // Route::get('/seat', [BookingController::class, 'index'])->name('seat');
+    // Route::get('/payment', [BookingController::class, 'index'])->name('payment');
 });

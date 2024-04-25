@@ -27,13 +27,13 @@ class Schedule extends Model
         return $this->belongsTo(Armada::class);
     }
 
-    public function price(): BelongsTo
-    {
-        return $this->belongsTo(Price::class);
-    }
+    // public function price(): BelongsTo
+    // {
+    //     return $this->belongsTo(Price::class);
+    // }
 
-    public function classes(): BelongsTo
-    {
-        return $this->belongsTo(Classes::class);
-    }
+    // public function classes(): BelongsTo
+    // {
+    //     return $this->belongsTo(Classes::class);
+    // }
 }

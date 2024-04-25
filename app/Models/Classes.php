@@ -23,4 +23,9 @@ class Classes extends Model
     {
         return $this->belongsToMany(Seat::class);
     }
+
+    public function price()
+    {
+        return $this->hasOne(Price::class, 'class_id', 'id');
+    }
 }

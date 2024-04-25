@@ -37,4 +37,9 @@ class Route extends Model
 
         return $jam . 'h' . ' ' . $sisaMenit . 'm';
     }
+
+    public function schedules()
+    {
+        return $this->hasMany(Schedule::class, 'route_id', 'id');
+    }
 }
