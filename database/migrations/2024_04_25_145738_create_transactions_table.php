@@ -17,9 +17,9 @@ return new class extends Migration
             $table->string('transaction_code')->unique();
             $table->string('status'); // cancel, booking, paid
             $table->double('total_price');
-            $table->double('price');
-            $table->double('discount');
-            $table->string('discount_type');
+            $table->double('price')->nullable();
+            $table->double('discount')->nullable();
+            $table->string('discount_type')->nullable();
             $table->foreignId('origin_city')->references('id')->on('cities');
             $table->foreignId('destination_city')->references('id')->on('cities');
             $table->string('armada_code');

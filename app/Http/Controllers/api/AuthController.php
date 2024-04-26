@@ -59,15 +59,6 @@ class AuthController extends Controller
         ]);
     }
 
-    /**
-     * Get the authenticated User.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function me()
-    {
-        return $this->apiResponse(Response::HTTP_OK, 'Profile User', ['user' => auth()->user()]);
-    }
 
     /**
      * Log the user out (Invalidate the token).

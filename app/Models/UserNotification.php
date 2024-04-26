@@ -14,5 +14,6 @@ class UserNotification extends Model
         'title',
         'body',
         'collapseKey',
+        'read_at',
     ];
 }
