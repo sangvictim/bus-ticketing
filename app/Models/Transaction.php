@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Closure;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -36,8 +37,21 @@ class Transaction extends Model
         'user_id',
     ];
 
+    protected static function booted(): void
+    {
+        // static::creating(self::onCreating());
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    protected static function onCreating(): Closure
+    {
+        return function (self $transaction) {
+            $transaction->user_id = auth()->user()->id;
+            $transaction->transaction_code = 'TRIP-' . microtime(true);
+        };
     }
 }

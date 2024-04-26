@@ -14,6 +14,7 @@ use App\Models\Role;
 use App\Models\Route;
 use App\Models\Schedule;
 use App\Models\Seat;
+use App\Models\Transaction;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -223,6 +224,24 @@ class DatabaseSeeder extends Seeder
                 'armada_id' => $key + 1,
                 'arrival_time' => '0' . ($key + 5) . ':00:00',
                 'departure_time' => '0' . ($key + 5) . ':15:00',
+            ]);
+        }
+
+        $users = User::all();
+        foreach ($users as $key => $user) {
+            $microtime = microtime(true);
+            Transaction::factory()->create([
+                "user_id" => $user->id,
+                "transaction_code" => "TRIP-" . $microtime,
+                "status" => "BOOKED",
+                "total_price" => 300000,
+                "price" => 300000,
+                "origin_city" => 42,
+                "destination_city" => 57,
+                "armada_code" => 123,
+                "armada_name" => "kuda bringas",
+                "armada_class" => "executive",
+                "armada_seat" => "1A"
             ]);
         }
     }

@@ -36,6 +36,6 @@ class UserController extends Controller
 
     public function notifications()
     {
-        return $this->apiResponse(Response::HTTP_OK, 'Notification User', ['user' => auth()->user()->notification]);
+        return $this->apiResponse(Response::HTTP_OK, 'Notification User', auth()->user()->notifications);
     }
 }

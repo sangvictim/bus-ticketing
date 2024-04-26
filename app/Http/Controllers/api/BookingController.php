@@ -52,16 +52,23 @@ class BookingController extends Controller
      */
     public function seat(Request $request): JsonResponse
     {
-        return response()->json(['seat']);
+        $transaction = Transaction::find($request->transaction_id);
+        if (!$transaction) {
+            return response()->json([
+                'code' => 404,
+                'message' => 'Transaction not found',
+            ]);
+        }
+        $transaction->armada_seat = $request->armada_seat;
+        $transaction->save();
+        return response()->json($transaction);
     }
 
     public function transaction(Request $request): JsonResponse
     {
 
         $transaction =  new Transaction;
-        $transaction->user_id = auth()->user()->id;
-        $transaction->transaction_code = $request->transaction_code;
-        $transaction->status = $request->status;
+        $transaction->status = 'BOOKED';
         $transaction->total_price = $request->total_price;
         $transaction->price = $request->price;
         $transaction->discount = $request->discount;
