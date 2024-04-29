@@ -16,7 +16,7 @@ class Facility extends Model
         'icon'
     ];
 
-    public function classArmadas(): BelongsToMany
+    public function classes(): BelongsToMany
     {
         return $this->belongsToMany(Classes::class);
     }

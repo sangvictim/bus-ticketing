@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Seat extends Model
 {
@@ -14,4 +15,9 @@ class Seat extends Model
         'description',
         'isActive',
     ];
+
+    public function classes(): BelongsToMany
+    {
+        return $this->belongsToMany(Classes::class);
+    }
 }
