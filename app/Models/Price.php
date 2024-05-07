@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Price extends Model
 {
-    use HasFactory;
+    use HasFactory, LogsActivity;
 
     protected $fillable = [
         'route_id',
@@ -29,5 +31,11 @@ class Price extends Model
     public function classes()
     {
         return $this->belongsTo(Classes::class, 'class_id');
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()->logOnlyDirty()->useLogName('Price')
+            ->setDescriptionForEvent(fn (string $eventName) => "Price {$this->name} has been {$eventName}");
     }
 }

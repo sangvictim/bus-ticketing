@@ -5,10 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Schedule extends Model
 {
-    use HasFactory;
+    use HasFactory, LogsActivity;
 
     protected $fillable = [
         'route_id',
@@ -27,13 +29,9 @@ class Schedule extends Model
         return $this->belongsTo(Armada::class);
     }
 
-    // public function price(): BelongsTo
-    // {
-    //     return $this->belongsTo(Price::class);
-    // }
-
-    // public function classes(): BelongsTo
-    // {
-    //     return $this->belongsTo(Classes::class);
-    // }
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()->logOnlyDirty()->useLogName('Schedule')
+            ->setDescriptionForEvent(fn (string $eventName) => "Schedule {$this->name} has been {$eventName}");
+    }
 }

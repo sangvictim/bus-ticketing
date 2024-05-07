@@ -29,6 +29,7 @@ class Agent extends Model
 
     public function getActivitylogOptions(): LogOptions
     {
-        return LogOptions::defaults();
+        return LogOptions::defaults()->logOnlyDirty()->useLogName('Agent')
+            ->setDescriptionForEvent(fn (string $eventName) => "Agent {$this->name} has been {$eventName}");
     }
 }
