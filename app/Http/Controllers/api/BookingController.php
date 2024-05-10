@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\ResponseApi;
 use App\Models\Route;
 use App\Models\Transaction;
 use Illuminate\Http\JsonResponse;
@@ -35,14 +36,11 @@ class BookingController extends Controller
 
     /**
      * Get the history transaction.
+     * @return \Illuminate\Http\JsonResponse
      */
     public function history(): JsonResponse
     {
-        $history = auth()->user()->transactions;
-        $history->each(function ($item) {
-            $item->user;
-        });
-        return response()->json($history);
+        return ResponseApi::success('History Transaction', auth()->user()->transactions);
     }
 
     /**

@@ -3,39 +3,28 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use App\Http\Controllers\ResponseApi;
+use Illuminate\Http\JsonResponse;
 
 class UserController extends Controller
 {
     /**
-     * Get the token array structure.
-     *
-     * @param  string $token
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    protected function apiResponse($code, $message, $data)
-    {
-        return response()->json([
-            "code" => $code,
-            "message" => $message,
-            "data" => $data
-        ]);
-    }
-
-    /**
-     * Get the authenticated User.
+     * Get the Profile User.
      *
      * @return \Illuminate\Http\JsonResponse
      */
     public function profile()
     {
-        return $this->apiResponse(Response::HTTP_OK, 'Profile User', ['user' => auth()->user()]);
+        return ResponseApi::success('Profile User', auth()->user());
     }
 
-    public function notifications()
+    /**
+     * Get the Notifications User.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function notifications(): JsonResponse
     {
-        return $this->apiResponse(Response::HTTP_OK, 'Notification User', auth()->user()->notifications);
+        return ResponseApi::success('Notification User', auth()->user()->notifications);
     }
 }
