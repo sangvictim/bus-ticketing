@@ -1,10 +1,12 @@
 <?php
 
+use App\Http\Controllers\ResponseApi;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -19,9 +21,23 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->render(function (AuthenticationException $e, Request $request) {
             if ($request->is('api/*')) {
-                return response()->json([
-                    'message' => $e->getMessage(),
-                ], 401);
+                $result = new ResponseApi;
+                $result->statusCode(Response::HTTP_UNAUTHORIZED);
+                $result->title('Unauthorized');
+                $result->message($e->getMessage());
+                $result->data(null);
+                return $result;
+            }
+        });
+
+        $exceptions->render(function (Throwable $e, Request $request) {
+            if ($request->is('api/*')) {
+                $result = new ResponseApi;
+                $result->statusCode(Response::HTTP_INTERNAL_SERVER_ERROR);
+                $result->title('Internal Server Error');
+                $result->message($e->getMessage());
+                $result->data(null);
+                return $result;
             }
         });
     })->create();

@@ -5,43 +5,86 @@ namespace App\Http\Controllers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Mockery\Undefined;
 
 /**
  * Response API
  */
 class ResponseApi extends JsonResponse
 {
-  /**
-   *  @method static \App\Http\Controllers\ApiResponse success(int $httpCode, string $message, string $title, mixed $data = [])
-   */
-  public static function success(int $httpCode, string $message, string $title, mixed $data = []): JsonResponse
+  protected string $message;
+  protected string $title;
+  protected mixed $data = [];
+
+  function __construct()
   {
-    return response()->json([
-      'message' => $message,
-      'title' => $title,
-      'data' => $data
-    ], $httpCode);
+    $this->message = 'OK';
+    $this->title = 'Response Title';
+
+    parent::__construct();
   }
 
-  /**
-   *  @method static \App\Http\Controllers\ApiResponse error(int $httpCode, string $message, string $error)
-   */
-  public static function error(int $httpCode, string $message, string $error): JsonResponse
+  public function message(string $message)
   {
-    return response()->json([
-      'message' => $message,
-      'error' => $error,
-    ], $httpCode);
+    $this->message = $message;
+    return $this->synchronizeData();
   }
 
-  /**
-   *  @method static \App\Http\Controllers\ApiResponse formError(int $httpCode, string $message, mixed $formError = [])
-   */
-  public static function formError(int $httpCode, string $message, mixed $formError = []): JsonResponse
+  public function getMessage()
   {
-    return response()->json([
-      'message' => $message,
+    return $this->message;
+  }
+
+  public function title(string $title)
+  {
+    $this->title = $title;
+    return $this->synchronizeData();
+  }
+
+  public function getTitle()
+  {
+    return $this->title;
+  }
+
+  public function data(mixed $data)
+  {
+    $this->data = $data;
+    return $this->synchronizeData();
+  }
+
+  public function getOriginData()
+  {
+    return $this->data;
+  }
+
+  public function error(string $error)
+  {
+    return parent::setData([
+      'message' => $error,
+      'title' => $this->getTitle(),
+    ]);
+  }
+
+  public function formError(mixed $formError)
+  {
+    return parent::setData([
+      'message' => $this->getMessage(),
+      'title' => $this->getTitle(),
       'formError' => $formError
-    ], $httpCode);
+    ]);
+  }
+
+  protected function synchronizeData(): static
+  {
+    return parent::setData([
+      'message' => $this->getMessage(),
+      'title' => $this->getTitle(),
+      'data' => $this->getOriginData()
+    ]);
+  }
+
+  public function statusCode(int $code): static
+  {
+    return $this->setStatusCode($code);
   }
 }

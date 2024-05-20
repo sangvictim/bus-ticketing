@@ -15,7 +15,11 @@ class UserController extends Controller
      */
     public function profile()
     {
-        return ResponseApi::success(Response::HTTP_OK, 'Profile User', 'Profile User', auth()->user());
+        $result = new ResponseApi;
+        $result->setStatusCode(Response::HTTP_OK);
+        $result->title('Profile User');
+        $result->data(auth()->user());
+        return $result;
     }
 
     /**
