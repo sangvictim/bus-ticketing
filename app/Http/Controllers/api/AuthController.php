@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\ResponseApi;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
-use Symfony\Component\HttpKernel\Attribute\WithHttpStatus;
 
 class AuthController extends Controller
 {
@@ -17,25 +18,30 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function register()
+    public function register(): JsonResponse
     {
         $validator = Validator::make(request()->all(), [
             'name' => 'required',
             'email' => 'required|email|unique:users',
-            'password' => 'required|confirmed|min:8',
+            'password' => 'required|min:8',
+            'phone' => 'required',
+            'gender' => 'required',
+            'birthday' => 'required',
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors()->toJson(), 400);
+            return ResponseApi::formError(Response::HTTP_UNPROCESSABLE_ENTITY, 'Validation error',  $validator->errors());
         }
-
         $user = new User;
         $user->name = request()->name;
         $user->email = request()->email;
         $user->password = bcrypt(request()->password);
+        $user->phone = request()->phone;
+        $user->gender = request()->gender;
+        $user->birthday = request()->birthday;
         $user->save();
 
-        return response()->json($user, 201);
+        return ResponseApi::success(Response::HTTP_CREATED, 'Resgistered', 'User created successfully', $user);
     }
 
     /**
@@ -45,15 +51,20 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
+        $validator = Validator::make($request->only('email', 'password'), [
+            'email' => 'required|email',
+            'password' => 'required|string|min:6',
+        ]);
+
+        if ($validator->fails()) {
+            return ResponseApi::formError(Response::HTTP_UNPROCESSABLE_ENTITY, 'Validation error',  $validator->errors());
+        }
         $credentials = $request->only('email', 'password');
         if (!$token = Auth::attempt($credentials)) {
-            return response()->json([
-                'status' => Response::HTTP_UNAUTHORIZED,
-                'message' => 'Unauthorized'
-            ],  Response::HTTP_UNAUTHORIZED);
+            return ResponseApi::error(Response::HTTP_UNAUTHORIZED, 'Unauthorized', 'Invalid credentials');
         }
 
-        return $this->apiResponse(Response::HTTP_OK, 'Successfully logged in', [
+        return ResponseApi::success(Response::HTTP_OK, 'You are logged in', 'Login Successful', [
             'user' => auth()->user(),
             'token' => $token
         ]);
@@ -67,9 +78,11 @@ class AuthController extends Controller
      */
     public function logout()
     {
-        auth()->logout();
+        $logout = auth()->logout();
 
-        return response()->json(Response::HTTP_OK,  'Successfully logged out');
+        if ($logout) {
+            return ResponseApi::success(Response::HTTP_OK, 'You are logged out', 'Logout Successful');
+        }
     }
 
     /**
@@ -79,22 +92,6 @@ class AuthController extends Controller
      */
     public function refresh()
     {
-        return $this->apiResponse(Response::HTTP_OK, 'Token Refreshed', ['token' => auth()->refresh()]);
-    }
-
-    /**
-     * Get the token array structure.
-     *
-     * @param  string $token
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    protected function apiResponse($code, $message, $data)
-    {
-        return response()->json([
-            "code" => $code,
-            "message" => $message,
-            "data" => $data
-        ]);
+        return ResponseApi::success(Response::HTTP_OK, 'Token Refreshed', 'Token Refreshed', ['refreshToken' => auth()->refresh()]);
     }
 }

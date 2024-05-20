@@ -4,7 +4,6 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\ResponseApi;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
 class UserController extends Controller
@@ -16,12 +15,7 @@ class UserController extends Controller
      */
     public function profile()
     {
-        $result = new ResponseApi;
-        $result->message('Profile User');
-        $result->success(auth()->user());
-        return $result;
-        // return $x->success('Profile User', auth()->user());
-        // return ResponseApi::success('Profile User', auth()->user());
+        return ResponseApi::success(Response::HTTP_OK, 'Profile User', 'Profile User', auth()->user());
     }
 
     /**
@@ -31,10 +25,6 @@ class UserController extends Controller
      */
     public function notifications()
     {
-        $result = new ResponseApi;
-        $result->message('Notification User');
-        $result->success(auth()->user()->notifications);
-        return $result;
-        // return ResponseApi::success('Notification User', auth()->user()->notifications);
+        return ResponseApi::success(Response::HTTP_OK, 'Notification User', 'Notification User', auth()->user()->notifications);
     }
 }

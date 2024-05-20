@@ -8,6 +8,7 @@ use App\Models\Route;
 use App\Models\Transaction;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class BookingController extends Controller
 {
@@ -31,16 +32,15 @@ class BookingController extends Controller
             }])
             ->get();
 
-        return response()->json($schedules);
+        return ResponseApi::success(Response::HTTP_OK, 'Schedules', 'Schedules', $schedules);
     }
 
     /**
      * Get the history transaction.
-     * @return \Illuminate\Http\JsonResponse
      */
     public function history(): JsonResponse
     {
-        return ResponseApi::success('History Transaction', auth()->user()->transactions);
+        return ResponseApi::success(Response::HTTP_OK, 'History Transaction', 'History Transaction', auth()->user()->transactions);
     }
 
     /**
@@ -59,7 +59,7 @@ class BookingController extends Controller
         }
         $transaction->armada_seat = $request->armada_seat;
         $transaction->save();
-        return response()->json($transaction);
+        return ResponseApi::success(Response::HTTP_OK, 'Seat', 'Seat', $transaction);
     }
 
     public function transaction(Request $request): JsonResponse
@@ -78,6 +78,6 @@ class BookingController extends Controller
         $transaction->armada_class = $request->armada_class;
         $transaction->armada_seat = $request->armada_seat;
         $transaction->save();
-        return response()->json($transaction);
+        return ResponseApi::success(Response::HTTP_OK, 'Transaction', 'Transaction', $transaction);
     }
 }
