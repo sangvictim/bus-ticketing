@@ -22,7 +22,7 @@ Route::group([
 
 Route::group([
     'prefix' => 'booking',
-    'middleware' => 'auth:api'
+    'middleware' => ['auth:api', 'throttle:api'],
 ], function ($router) {
     Route::get('/schedules', [BookingController::class, 'index']);
     Route::get('/history', [BookingController::class, 'history']);
@@ -32,7 +32,7 @@ Route::group([
 
 Route::group([
     'prefix' => 'user',
-    'middleware' => 'auth:api'
+    'middleware' => ['auth:api', 'throttle:api']
 ], function ($router) {
     Route::get('/profile', [UserController::class, 'profile']);
     Route::get('/notifications', [UserController::class, 'notifications']);

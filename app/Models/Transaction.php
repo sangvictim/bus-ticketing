@@ -39,7 +39,7 @@ class Transaction extends Model
 
     protected static function booted(): void
     {
-        // static::creating(self::onCreating());
+        static::creating(self::onCreating());
     }
 
     public function user()

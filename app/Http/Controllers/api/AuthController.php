@@ -25,7 +25,7 @@ class AuthController extends Controller
       'name' => 'required',
       'email' => 'required|email|unique:users',
       'password' => 'required|min:8',
-      'phone' => 'required',
+      'phone' => 'required|unique:users',
       'gender' => 'required',
       'birthday' => 'required',
     ]);
@@ -37,6 +37,7 @@ class AuthController extends Controller
       $result->formError($validator->errors());
       return $result;
     }
+
     $user = new User;
     $user->name = request()->name;
     $user->email = request()->email;
@@ -47,16 +48,14 @@ class AuthController extends Controller
     $user->save();
 
     $result->statusCode(Response::HTTP_CREATED);
-    $result->message('Register Successful');
-    $result->title('User created successfully');
+    $result->message('Created');
+    $result->title('Register Successful');
     $result->data($user);
     return $result;
   }
 
   /**
    * Get a JWT via given credentials.
-   *
-   * @return \Illuminate\Http\JsonResponse
    */
   public function login(Request $request): JsonResponse
   {

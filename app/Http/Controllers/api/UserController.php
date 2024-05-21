@@ -29,6 +29,10 @@ class UserController extends Controller
      */
     public function notifications()
     {
-        return ResponseApi::success(Response::HTTP_OK, 'Notification User', 'Notification User', auth()->user()->notifications);
+        $result = new ResponseApi;
+        $result->setStatusCode(Response::HTTP_OK);
+        $result->title('Notification User');
+        $result->data(auth()->user()->notifications);
+        return $result;
     }
 }
