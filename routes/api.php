@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Route;
 // })->middleware('auth:sanctum');
 
 Route::group([
-    'middleware' => 'api',
+    'middleware' => ['api', 'throttle:60,1'],
     'prefix' => 'auth'
 ], function ($router) {
     Route::post('/register', [AuthController::class, 'register'])->name('register');
@@ -22,7 +22,7 @@ Route::group([
 
 Route::group([
     'prefix' => 'booking',
-    'middleware' => ['auth:api', 'throttle:api'],
+    'middleware' => ['auth:api', 'throttle:60,1'],
 ], function ($router) {
     Route::get('/schedules', [BookingController::class, 'index']);
     Route::get('/history', [BookingController::class, 'history']);
@@ -32,8 +32,8 @@ Route::group([
 
 Route::group([
     'prefix' => 'user',
-    'middleware' => ['auth:api', 'throttle:api']
+    'middleware' => ['auth:api', 'throttle:60,1']
 ], function ($router) {
-    Route::get('/profile', [UserController::class, 'profile']);
+    Route::get('/profile', [UserController::class, 'profile'])->middleware('throttle:5,1');
     Route::get('/notifications', [UserController::class, 'notifications']);
 });

@@ -6,8 +6,11 @@ use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Http\Exceptions\ThrottleRequestsException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Queue\Middleware\ThrottlesExceptions;
+use Illuminate\Routing\Middleware\ThrottleRequests;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -17,9 +20,7 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        $middleware->alias([
-            'throttle' => CustomThrottleMiddleware::class
-        ]);
+        //
     })
     ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->render(function (AuthenticationException $e, Request $request) {
@@ -33,22 +34,25 @@ return Application::configure(basePath: dirname(__DIR__))
             }
         });
 
+        $exceptions->render(function (ThrottleRequestsException $e, Request $request) {
+            if ($request->is('api/*')) {
+                $result = new ResponseApi;
+                $result->statusCode(Response::HTTP_TOO_MANY_REQUESTS);
+                $result->title('Too Many Requests');
+                $result->message($e->getMessage());
+                $result->data(null);
+                return $result;
+            }
+        });
+
         $exceptions->render(function (Throwable $e, Request $request) {
             if ($request->is('api/*')) {
-                // if ($e->errorInfo[1] == 1062) {
-                //     $result = new ResponseApi;
-                //     $result->statusCode(409);
-                //     $result->title('Duplicate Entry');
-                //     $result->message('Conflict');
-                //     $result->data(null);
-                //     return $result;
-                // }
                 $result = new ResponseApi;
                 $result->statusCode(Response::HTTP_INTERNAL_SERVER_ERROR);
                 $result->title('Internal Server Error');
                 $result->message($e->getMessage());
                 $result->data(null);
-                return $e->getMessage();
+                return $result;
             }
         });
     })->create();

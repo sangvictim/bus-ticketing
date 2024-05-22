@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\UserResource\Pages;
+use App\Filament\Resources\AdminResource\Pages;
 use App\Models\Admin;
 use Filament\Tables\Actions\EditAction;
 use Filament\Forms\Components\CheckboxList;
