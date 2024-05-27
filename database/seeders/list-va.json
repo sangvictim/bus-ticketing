@@ -1,0 +1,93 @@
+[
+  {
+    "name": "Bank Central Asia",
+    "code": "BCA",
+    "country": "ID",
+    "currency": "IDR",
+    "is_activated": true
+  },
+  {
+    "name": "Bank Negara Indonesia",
+    "code": "BNI",
+    "country": "ID",
+    "currency": "IDR",
+    "is_activated": true
+  },
+  {
+    "name": "Bank Mandiri",
+    "code": "MANDIRI",
+    "country": "ID",
+    "currency": "IDR",
+    "is_activated": true
+  },
+  {
+    "name": "Bank Permata",
+    "code": "PERMATA",
+    "country": "ID",
+    "currency": "IDR",
+    "is_activated": true
+  },
+  {
+    "name": "Bank Sahabat Sampoerna",
+    "code": "SAHABAT_SAMPOERNA",
+    "country": "ID",
+    "currency": "IDR",
+    "is_activated": true
+  },
+  {
+    "name": "Bank Rakyat Indonesia",
+    "code": "BRI",
+    "country": "ID",
+    "currency": "IDR",
+    "is_activated": true
+  },
+  {
+    "name": "Bank CIMB Niaga",
+    "code": "CIMB",
+    "country": "ID",
+    "currency": "IDR",
+    "is_activated": true
+  },
+  {
+    "name": "Bank Syariah Indonesia",
+    "code": "BSI",
+    "country": "ID",
+    "currency": "IDR",
+    "is_activated": true
+  },
+  {
+    "name": "Bank Jabar Banten",
+    "code": "BJB",
+    "country": "ID",
+    "currency": "IDR",
+    "is_activated": true
+  },
+  {
+    "name": "The Development Bank of Singapore",
+    "code": "DBS",
+    "country": "ID",
+    "currency": "IDR",
+    "is_activated": false
+  },
+  {
+    "name": "Bank Neo Commerce",
+    "code": "BNC",
+    "country": "ID",
+    "currency": "IDR",
+    "is_activated": true
+  },
+  {
+    "name": "KEB Hana Bank",
+    "code": "HANA",
+    "country": "ID",
+    "currency": "IDR",
+    "is_activated": false
+  },
+  {
+    "name": "Bank Muamalat",
+    "code": "MUAMALAT",
+    "country": "ID",
+    "currency": "IDR",
+    "is_activated": false
+  }
+]

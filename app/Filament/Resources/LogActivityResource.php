@@ -42,7 +42,7 @@ class LogActivityResource extends Resource
             ->columns([
                 TextColumn::make('log_name')->label('Log Name')->searchable(),
                 TextColumn::make('description')->label('Description')->searchable()
-                    ->description(fn (Activity $record) => $record->causer->name . ' ' . $record->event . ' ' . $record->log_name . ' ' . $record->subject->name),
+                    ->description(fn (Activity $record) => $record->causer->name ?? 'Unknown' . ' ' . $record->event . ' ' . $record->log_name . ' ' . $record->subject->name),
                 TextColumn::make('created_at')->label('Created At')
             ])
             ->filters([
