@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignUlid('user_id')->constrained('users');
             $table->string('title');
             $table->string('body');
-            $table->string('collapseKey');
+            $table->string('collapseKey')->nullable();
             $table->timestamp('read_at')->nullable();
             $table->timestamps();
         });

@@ -24,4 +24,9 @@ class PaymentMethod extends Model
     {
         return $this->belongsTo(PaymentMethod::class, 'parent');
     }
+
+    public function childrens()
+    {
+        return $this->hasMany(PaymentMethod::class, 'parent');
+    }
 }

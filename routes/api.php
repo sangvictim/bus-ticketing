@@ -2,8 +2,10 @@
 
 use App\Http\Controllers\api\AuthController;
 use App\Http\Controllers\api\BookingController;
+use App\Http\Controllers\api\PaymentController;
 use App\Http\Controllers\api\UserController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\payment\XenditVAController;
+use App\Http\Controllers\PaymentRequest\Xendit;
 use Illuminate\Support\Facades\Route;
 
 // Route::get('/user', function (Request $request) {
@@ -36,4 +38,25 @@ Route::group([
 ], function ($router) {
     Route::get('/profile', [UserController::class, 'profile'])->middleware('throttle:5,1');
     Route::get('/notifications', [UserController::class, 'notifications']);
+});
+
+Route::group([
+    'prefix' => 'payment',
+    'middleware' => ['auth:api', 'throttle:60,1']
+], function ($router) {
+    Route::get('/list', [PaymentController::class, 'list']);
+    Route::post('/va/paid', [PaymentController::class, 'createVA']);
+});
+
+Route::group([
+    'prefix' => 'callback',
+    'middleware' => ['throttle:60,1']
+], function ($router) {
+    Route::post('/va', [PaymentController::class, 'callbackVirtualAccountPaid']);
+});
+
+Route::post('xxx', function () {
+    $x = Xendit::VirtualAccountCreate('va-123456789', 'BCA', 'saya');
+
+    return $x;
 });

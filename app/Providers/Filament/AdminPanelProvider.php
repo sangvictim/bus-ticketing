@@ -60,6 +60,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authGuard('admin')
             ->navigationGroups([
+                'Client Area',
                 'Manage Agents',
                 'Manage Trayek',
                 'Manage Armada',

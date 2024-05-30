@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Transaction extends Model
 {
@@ -53,5 +54,20 @@ class Transaction extends Model
             $transaction->user_id = auth()->user()->id;
             $transaction->transaction_code = 'TRIP-' . microtime(true);
         };
+    }
+
+    public function originCity(): BelongsTo
+    {
+        return $this->belongsTo(City::class, 'origin_city');
+    }
+
+    public function destinationCity(): BelongsTo
+    {
+        return $this->belongsTo(City::class, 'destination_city');
+    }
+
+    public function classArmada(): BelongsTo
+    {
+        return $this->belongsTo(Classes::class, 'armada_class');
     }
 }

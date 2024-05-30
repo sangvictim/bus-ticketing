@@ -230,6 +230,7 @@ class DatabaseSeeder extends Seeder
 
     $users = User::all();
     foreach ($users as $key => $user) {
+      $armada = Armada::inRandomOrder()->first();
       $microtime = microtime(true);
       Transaction::factory()->create([
         "user_id" => $user->id,
@@ -239,9 +240,9 @@ class DatabaseSeeder extends Seeder
         "price" => 300000,
         "origin_city" => 42,
         "destination_city" => 57,
-        "armada_code" => 123,
-        "armada_name" => "kuda bringas",
-        "armada_class" => "executive",
+        "armada_code" => $armada->code,
+        "armada_name" => $armada->name,
+        "armada_class" => $armada->classes[0],
         "armada_seat" => "1A"
       ]);
     }
