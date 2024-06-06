@@ -11,6 +11,7 @@ use App\Models\Transaction;
 use App\Models\UserNotification;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class PaymentController extends Controller
@@ -102,6 +103,7 @@ class PaymentController extends Controller
   public function callbackVirtualAccountPaid(Request $request)
   {
     $response = new ResponseApi;
+
     /**
      * check token webhook from xendit
      * token can be get from environment XENDIT_CALLBACK_TOKEN
@@ -114,23 +116,24 @@ class PaymentController extends Controller
       $response->data(null);
       return $response;
     }
+    DB::beginTransaction(function () use ($request) {
+      // update payment to paid
+      $payment = Payment::where('external_id', $request->external_id)->first();
+      $payment->status = 'PAID';
+      $payment->save();
 
-    // update payment to paid
-    $payment = Payment::where('external_id', $request->external_id)->first();
-    $payment->status = 'PAID';
-    $payment->save();
+      // update transaction to paid
+      $transaction = Transaction::find($payment->transaction_id);
+      $transaction->status = 'PAID';
+      $transaction->save();
 
-    // update transaction to paid
-    $transaction = Transaction::find($payment->transaction_id);
-    $transaction->status = 'PAID';
-    $transaction->save();
-
-    // create user notification
-    $notification = new UserNotification;
-    $notification->user_id = $transaction->user_id;
-    $notification->title = 'Success';
-    $notification->body = 'Ticket has been paid';
-    $notification->save();
+      // create user notification
+      $notification = new UserNotification;
+      $notification->user_id = $transaction->user_id;
+      $notification->title = 'Success';
+      $notification->body = 'Ticket has been paid';
+      $notification->save();
+    });
 
     // response success
     $response->setStatusCode(Response::HTTP_OK);
