@@ -84,4 +84,9 @@ class ResponseApi extends JsonResponse
   {
     return $this->setStatusCode($code);
   }
+
+  public function setHeader(array $headers): static
+  {
+    return $this->withHeaders($headers);
+  }
 }

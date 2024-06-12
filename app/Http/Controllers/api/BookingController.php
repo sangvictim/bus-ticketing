@@ -4,16 +4,20 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\ResponseApi;
+use App\Models\City;
 use App\Models\Route;
 use App\Models\Transaction;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class BookingController extends Controller
 {
   /**
    * Get the schedules.
+   * Unathorized
    */
   public function index(Request $request): JsonResponse
   {
@@ -40,6 +44,25 @@ class BookingController extends Controller
   }
 
   /**
+   * Get the cities.
+   * Unathorized
+   */
+  public function cities()
+  {
+    $cities = City::select('id', 'name')->get();
+
+    $result = new ResponseApi;
+    $result->setStatusCode(Response::HTTP_OK);
+    $result->title('Cities');
+    $result->data($cities);
+    $result->setHeader([
+      'Content-Type' => 'application/json',
+      'cache-control' => 'public, max-age=3600'
+    ]);
+    return $result;
+  }
+
+  /**
    * Get the history transaction.
    */
   public function history(): JsonResponse
@@ -58,16 +81,21 @@ class BookingController extends Controller
    */
   public function seat(Request $request): JsonResponse
   {
-    $transaction = Transaction::find($request->transaction_id);
+    $result = new ResponseApi;
+    $transaction = Transaction::where('transaction_code', $request->transaction_code)->first();
     if (!$transaction) {
-      return response()->json([
-        'code' => 404,
-        'message' => 'Transaction not found',
-      ]);
+      $result->setStatusCode(Response::HTTP_NOT_FOUND);
+      $result->title('Transaction not found');
+      $result->message('Transaction not found');
+      $result->data(null);
+      return $result;
     }
     $transaction->armada_seat = $request->armada_seat;
     $transaction->save();
-    return ResponseApi::success(Response::HTTP_OK, 'Seat', 'Seat', $transaction);
+
+    $result->title('Seat Updated');
+    $result->data($transaction);
+    return $result;
   }
 
   public function transaction(Request $request): JsonResponse
@@ -82,8 +110,28 @@ class BookingController extends Controller
       return $result;
     }
 
+    $validator = Validator::make($request->all(), [
+      'total_price' => 'required',
+      'origin_city' => 'required',
+      'destination_city' => 'required',
+      'armada_code' => 'required',
+      'armada_name' => 'required',
+      'armada_class' => 'required',
+      'armada_seat' => 'required',
+    ]);
+
+    if ($validator->fails()) {
+      $result->setStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY);
+      $result->title('Transaction');
+      $result->message('Failed');
+      $result->formError($validator->errors());
+      return $result;
+    }
+
     $transaction =  new Transaction;
     $transaction->status = 'BOOKED';
+    $transaction->user_id = auth()->user()->id;
+    $transaction->transaction_code = 'TRIP-' . microtime(true);
     $transaction->total_price = $request->total_price;
     $transaction->price = $request->price;
     $transaction->discount = $request->discount;

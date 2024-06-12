@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\ResponseApi;
-use App\Http\Middleware\CustomThrottleMiddleware;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -9,8 +8,7 @@ use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Exceptions\ThrottleRequestsException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Queue\Middleware\ThrottlesExceptions;
-use Illuminate\Routing\Middleware\ThrottleRequests;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -39,6 +37,17 @@ return Application::configure(basePath: dirname(__DIR__))
                 $result = new ResponseApi;
                 $result->statusCode(Response::HTTP_TOO_MANY_REQUESTS);
                 $result->title('Too Many Requests');
+                $result->message($e->getMessage());
+                $result->data(null);
+                return $result;
+            }
+        });
+
+        $exceptions->render(function (NotFoundHttpException $e, Request $request) {
+            if ($request->is('api/*')) {
+                $result = new ResponseApi;
+                $result->statusCode(Response::HTTP_NOT_FOUND);
+                $result->title('Route Not Found');
                 $result->message($e->getMessage());
                 $result->data(null);
                 return $result;

@@ -4,8 +4,6 @@ use App\Http\Controllers\api\AuthController;
 use App\Http\Controllers\api\BookingController;
 use App\Http\Controllers\api\PaymentController;
 use App\Http\Controllers\api\UserController;
-use App\Http\Controllers\payment\XenditVAController;
-use App\Http\Controllers\PaymentRequest\Xendit;
 use Illuminate\Support\Facades\Route;
 
 // Route::get('/user', function (Request $request) {
@@ -26,11 +24,12 @@ Route::group([
     'prefix' => 'booking',
     'middleware' => ['auth:api', 'throttle:60,1'],
 ], function ($router) {
-    Route::get('/schedules', [BookingController::class, 'index']);
     Route::get('/history', [BookingController::class, 'history']);
-    Route::get('/seat', [BookingController::class, 'seat'])->name('seat');
+    Route::post('/seat', [BookingController::class, 'seat'])->name('seat');
     Route::post('/transaction', [BookingController::class, 'transaction']);
 });
+Route::get('/schedules', [BookingController::class, 'index']);
+Route::get('/cities', [BookingController::class, 'cities']);
 
 Route::group([
     'prefix' => 'user',
@@ -55,8 +54,13 @@ Route::group([
     Route::post('/va', [PaymentController::class, 'callbackVirtualAccountPaid']);
 });
 
-Route::post('xxx', function () {
-    $x = Xendit::VirtualAccountCreate('va-123456789', 'BCA', 'saya');
+Route::get('xxx', function () {
+    // $x = Xendit::VirtualAccountCreate('va-123456789', 'BCA', 'saya');
 
-    return $x;
+    // return $x;
+    // Redis::set('x', 'xxxxxx');
+    // $x = Redis::get('x');
+    // return response()->json([
+    //     'data' => $x
+    // ]);
 });
