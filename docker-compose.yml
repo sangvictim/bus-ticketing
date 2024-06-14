@@ -1,0 +1,64 @@
+version: '1'
+services:
+
+  #PHP Service
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: tiketing:0.0.1
+    container_name: app-ticketing
+    restart: unless-stopped
+    expose:
+      - 9000
+    ports:
+      - "9000:9000"
+    depends_on:
+      - db
+    tty: true
+    environment:
+      SERVICE_NAME: app
+      SERVICE_TAGS: dev
+    working_dir: /var/www/bus-ticketing
+    volumes:
+      - ./:/var/www/bus-ticketing
+    networks:
+      - bridge
+
+  #Nginx Service
+  webserver:
+    image: nginx:1.27.0
+    container_name: webserver-ticketing
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - bridge
+    depends_on:
+      - app
+    volumes:
+      - ./:/var/www/bus-ticketing
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+
+  #MySQL Service
+  db:
+    image: mysql:8.3.0
+    container_name: db-ticketing
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: toketing
+      MYSQL_ROOT_PASSWORD: 123456
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    networks:
+      - bridge
+
+#Docker Networks
+networks:
+  bridge:
+    driver: bridge
