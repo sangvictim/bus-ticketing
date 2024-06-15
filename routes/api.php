@@ -44,7 +44,7 @@ Route::group([
     'middleware' => ['auth:api', 'throttle:60,1']
 ], function ($router) {
     Route::get('/list', [PaymentController::class, 'list']);
-    Route::post('/va/paid', [PaymentController::class, 'createVA']);
+    Route::post('/create/va', [PaymentController::class, 'createVA']);
 });
 
 Route::group([

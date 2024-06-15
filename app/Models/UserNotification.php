@@ -16,4 +16,13 @@ class UserNotification extends Model
         'collapseKey',
         'read_at',
     ];
+
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
+    protected $hidden = [
+        'user_id',
+    ];
 }

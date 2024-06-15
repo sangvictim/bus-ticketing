@@ -116,7 +116,7 @@ class PaymentController extends Controller
       $response->data(null);
       return $response;
     }
-    DB::beginTransaction(function () use ($request) {
+    DB::transaction(function () use ($request) {
       // update payment to paid
       $payment = Payment::where('external_id', $request->external_id)->first();
       $payment->status = 'PAID';
