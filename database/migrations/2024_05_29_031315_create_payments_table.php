@@ -13,15 +13,15 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->ulid('id')->primary();
-            $table->string('external_id')->unique();
             $table->foreignUlid('user_id')->references('id')->on('users');
-            $table->foreignUlid('transaction_id')->references('id')->on('transactions');
+            $table->string('external_id')->unique()->references('transaction_code')->on('transactions');
             $table->string('channel');
             $table->string('code');
             $table->string('name');
-            $table->string('account_number');
+            $table->string('account_number')->nullable();
             $table->string('status');
             $table->double('expected_amount');
+            $table->json('properties')->nullable();
             $table->timestamps();
         });
     }

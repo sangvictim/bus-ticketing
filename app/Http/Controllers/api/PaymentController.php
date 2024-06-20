@@ -55,7 +55,6 @@ class PaymentController extends Controller
       'external_id' => 'required',
       'name' => 'required',
       'bank_code' => 'required',
-      'transaction_id' => 'required',
       'expected_amount' => 'required',
       'channel' => 'required',
     ]);
@@ -75,7 +74,6 @@ class PaymentController extends Controller
       $payment = new Payment;
       $payment->external_id = $createVA->external_id;
       $payment->user_id = auth()->user()->id;
-      $payment->transaction_id = $request->transaction_id;
       $payment->channel = $request->channel;
       $payment->code = $request->bank_code;
       $payment->name = $request->name;
@@ -123,7 +121,7 @@ class PaymentController extends Controller
       $payment->save();
 
       // update transaction to paid
-      $transaction = Transaction::find($payment->transaction_id);
+      $transaction = Transaction::where('transaction_code', $request->external_id)->first();
       $transaction->status = 'PAID';
       $transaction->save();
 

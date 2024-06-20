@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->ulid('id')->primary();
             $table->foreignUlid('user_id')->constrained('users');
-            $table->string('transaction_code')->unique();
+            $table->string('transaction_code')->unique()->index();
             $table->string('status'); // cancel, booking, paid
             $table->double('total_price');
             $table->double('price')->nullable();
