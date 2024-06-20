@@ -2,8 +2,6 @@
 
 namespace App\Providers;
 
-use Illuminate\Foundation\Auth\User;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 

@@ -6,9 +6,9 @@ use App\Filament\Resources\RoleResource\Pages;
 use App\Models\Permission;
 use App\Models\Role;
 use Filament\Forms\Components\Checkbox;
-use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -16,7 +16,6 @@ use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
 
 class RoleResource extends Resource
 {
@@ -26,6 +25,8 @@ class RoleResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-cog';
 
+    protected static Collection $permissionsCollection;
+
     public static function getNavigationGroup(): ?string
     {
         return ('Administrator');
@@ -33,10 +34,37 @@ class RoleResource extends Resource
 
     public static function form(Form $form): Form
     {
-        return $form
-            ->schema([
-                TextInput::make('name'),
-                Section::make('Permissions')->schema(array_merge(
+        return $form->schema([
+            Section::make(__('Role'))->schema([
+                TextInput::make('name')
+                    ->label(__('Name'))
+                    ->columnSpanFull()
+                    ->required()
+                    ->unique(ignoreRecord: true),
+                TextInput::make('guard_name')
+                    ->hidden()
+                    ->default('admin'),
+            ]),
+            Section::make(__('Users'))->schema([
+                Select::make('users')
+                    ->label(__('Attach to'))
+                    ->columnSpanFull()
+                    ->relationship(
+                        'users',
+                        'name',
+                        fn ($query) => //
+                        $query->take(config('base.records_limit.users')),
+                    )
+                    ->multiple()
+                    ->searchable()
+                    ->preload()
+                    ->getOptionLabelFromRecordUsing(
+                        fn ($record) => //
+                        "{$record->name} — {$record->email}",
+                    ),
+            ]),
+            Section::make(__('Access'))->schema(
+                array_merge(
                     [
                         Fieldset::make('all_fieldset')
                             ->statePath(null)
@@ -45,20 +73,24 @@ class RoleResource extends Resource
                             ->columns(1)
                             ->schema([
                                 Checkbox::make('permissions.god_mode')
-                                    ->label(__('SUPER ADMIN - ALL ACCESS'))
+                                    ->label(__('SUPERADMIN - ALL ACCESS'))
                                     ->helperText(__('Special permission to override all permissions.'))
                                     ->formatStateUsing(fn ($state) => boolval($state))
-                                    ->reactive()
+                                    ->reactive(),
                             ]),
                     ],
                     static::getGroupPermissions()->map(
-                        fn ($permissions, $group) =>
-                        Fieldset::make($group)
-                            ->label(ucwords($group))
+                        fn ($permissions, $group) => //
+                        Fieldset::make($group . '.fieldset')
+                            ->statePath(null)
+                            ->label(__('Access') . ' — ' . __(ucwords($group)))
+                            ->extraAttributes(['class' => 'text-primary-600'])
+                            ->columns(5)
+                            ->visible(fn ($get) => !boolval($get('permissions.god_mode')))
                             ->schema($permissions->map(
                                 fn ($permission) => //
                                 Checkbox::make('permissions.' . base64_encode($permission->name))
-                                    ->label($permission->name)
+                                    ->label(__($permission->name))
                                     ->extraAttributes(['class' => 'text-primary-600'])
                                     ->formatStateUsing(fn ($state) => boolval($state))
                                     ->reactive()
@@ -75,19 +107,20 @@ class RoleResource extends Resource
                                         }
                                     }),
                             )->toArray()),
-
-                    )->toArray()
-                ))->afterStateHydrated(function ($context, $record, $set) {
-                    if ($context == 'view' || $context == 'edit') {
-                        foreach ($record->permissions as $p) {
-                            $set($p->name == '*'
-                                ? 'permissions.god_mode'
-                                : 'permissions.' . base64_encode($p->name), true);
-                        }
+                    )->toArray(),
+                ),
+            )->afterStateHydrated(function ($context, $record, $set) {
+                if ($context == 'view' || $context == 'edit') {
+                    foreach ($record->permissions as $p) {
+                        $set($p->name == '*'
+                            ? 'permissions.god_mode'
+                            : 'permissions.' . base64_encode($p->name), true);
                     }
-                })->description('Assigned Permission To Role')
-            ])->columns(1);
+                }
+            }),
+        ]);
     }
+
 
     public static function table(Table $table): Table
     {

@@ -33,7 +33,12 @@ class DatabaseSeeder extends Seeder
         "*",
         "permission.*", "permission.view",
         "role.*", "role.create", "role.view", "role.update", "role.delete",
-        "user.*", "user.create", "user.view", "user.update", "user.delete",
+        "admin.*", "admin.create", "admin.view", "admin.update", "admin.delete",
+        "log.*", "log.view",
+        "payment-method.*", "payment-method.create", "payment-method.view", "payment-method.update", "payment-method.delete",
+        "transaction.*", "transaction.view",
+        "user.*", "user.view",
+        "agent.*", "agent.create", "agent.view", "agent.update", "agent.delete",
       ];
     $role = ['super admin', 'admin'];
 
@@ -53,13 +58,13 @@ class DatabaseSeeder extends Seeder
 
     Admin::factory()->create([
       'name' => 'Super Admin',
-      'email' => 'admin@mail.com',
+      'email' => 'super@mail.com',
       'password' => bcrypt(123), //123
     ])->assignRole(1);
 
     Admin::factory()->create([
       'name' => 'Admin',
-      'email' => 'user@mail.com',
+      'email' => 'admin@mail.com',
       'password' => bcrypt(123), //123
     ])->assignRole(2);
 
