@@ -39,6 +39,10 @@ class DatabaseSeeder extends Seeder
         "transaction.*", "transaction.view",
         "user.*", "user.view",
         "agent.*", "agent.create", "agent.view", "agent.update", "agent.delete",
+        "city.*", "city.create", "city.view", "city.update", "city.delete",
+        "price.*", "price.create", "price.view", "price.update", "price.delete",
+        "routes.*", "routes.create", "routes.view", "routes.update", "routes.delete",
+        "schedule.*", "schedule.create", "schedule.view", "schedule.update", "schedule.delete",
       ];
     $role = ['super admin', 'admin'];
 
