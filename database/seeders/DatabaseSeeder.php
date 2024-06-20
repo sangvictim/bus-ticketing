@@ -43,8 +43,11 @@ class DatabaseSeeder extends Seeder
         "price.*", "price.create", "price.view", "price.update", "price.delete",
         "routes.*", "routes.create", "routes.view", "routes.update", "routes.delete",
         "schedule.*", "schedule.create", "schedule.view", "schedule.update", "schedule.delete",
+        "armada.*", "armada.create", "armada.view", "armada.update", "armada.delete",
+        "class-armada.*", "class-armada.create", "class-armada.view", "class-armada.update", "class-armada.delete",
+        "facility.*", "facility.create", "facility.view", "facility.update", "facility.delete",
+        "seat.*", "seat.create", "seat.view", "seat.update", "seat.delete",
       ];
-    $role = ['super admin', 'admin'];
 
     for ($i = 0; $i < count($permission); $i++) {
       Permission::factory()->create([
@@ -53,12 +56,14 @@ class DatabaseSeeder extends Seeder
       ]);
     }
 
-    for ($i = 0; $i < count($role); $i++) {
-      Role::factory()->create([
-        'name' => $role[$i],
-        'guard_name' => 'admin'
-      ])->givePermissionTo('*');
-    }
+    Role::factory()->create([
+      'name' => 'super admin',
+      'guard_name' => 'admin'
+    ])->givePermissionTo('*');
+    Role::factory()->create([
+      'name' => 'admin',
+      'guard_name' => 'admin'
+    ])->givePermissionTo(Permission::where('id', '>', 20)->get());
 
     Admin::factory()->create([
       'name' => 'Super Admin',
