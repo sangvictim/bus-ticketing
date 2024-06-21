@@ -36,4 +36,29 @@ class Xendit
     ]);
     return json_decode($response->body());
   }
+
+  public static function RetailOutlets($external_id, $retail_outlet_name, $name, $expected_amount)
+  {
+    $client = Http::withBasicAuth(env('XENDIT_API_KEY'), '');
+    $response = $client->post(self::$baseUrl . 'fixed_payment_code', [
+      "external_id" => $external_id,
+      "retail_outlet_name" => $retail_outlet_name,
+      "name" => $name,
+      "expected_amount" => $expected_amount
+    ]);
+    return json_decode($response->body());
+  }
+
+  public static function QRCodes($external_id, $expected_amount)
+  {
+    $client = Http::withBasicAuth(env('XENDIT_API_KEY'), '');
+    $response = $client->post(self::$baseUrl . 'qr_codes', [
+      "external_id" => $external_id,
+      "type" => "DYNAMIC",
+      "currency" => "IDR",
+      "amount" => $expected_amount,
+      "callback_url" => "https://redirect.me/payment"
+    ]);
+    return json_decode($response->body());
+  }
 }
