@@ -44,23 +44,23 @@ Route::group([
     'middleware' => ['auth:api', 'throttle:60,1']
 ], function ($router) {
     Route::get('/list', [PaymentController::class, 'list']);
+
+    // Virtual Account
     Route::post('/create/va', [PaymentController::class, 'createVA']);
+
+    // E-Wallet
+    Route::post('/create/ewallet', [PaymentController::class, 'CreateEwallet']);
 });
 
 Route::group([
     'prefix' => 'callback',
     'middleware' => ['throttle:60,1']
 ], function ($router) {
+
+    // Virtual Account
     Route::post('/va', [PaymentController::class, 'callbackVirtualAccountPaid']);
-});
 
-Route::get('xxx', function () {
-    // $x = Xendit::VirtualAccountCreate('va-123456789', 'BCA', 'saya');
-
-    // return $x;
-    // Redis::set('x', 'xxxxxx');
-    // $x = Redis::get('x');
-    // return response()->json([
-    //     'data' => $x
-    // ]);
+    // E-Wallet
+    Route::post('/ewallet/status', [PaymentController::class, 'CallbackEwalletPaid']);
+    Route::post('/ewallet/rekonsilisasi', [PaymentController::class, 'CallbackEwalletPaid']);
 });

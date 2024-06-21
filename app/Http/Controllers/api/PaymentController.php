@@ -49,6 +49,9 @@ class PaymentController extends Controller
     return $result;
   }
 
+  /**
+   * Create Virtual Account
+   */
   public function createVA(Request $request)
   {
     $validated = Validator::make($request->all(), [
@@ -98,6 +101,9 @@ class PaymentController extends Controller
     return $response;
   }
 
+  /**
+   * Callback Virtual Account
+   */
   public function callbackVirtualAccountPaid(Request $request)
   {
     $response = new ResponseApi;
@@ -122,6 +128,107 @@ class PaymentController extends Controller
 
       // update transaction to paid
       $transaction = Transaction::where('transaction_code', $request->external_id)->first();
+      $transaction->status = 'PAID';
+      $transaction->save();
+
+      // create user notification
+      $notification = new UserNotification;
+      $notification->user_id = $transaction->user_id;
+      $notification->title = 'Success';
+      $notification->body = 'Ticket has been paid';
+      $notification->save();
+    });
+
+    // response success
+    $response->setStatusCode(Response::HTTP_OK);
+    $response->title('Payment');
+    $response->message('OK');
+    $response->data(null);
+    return $response;
+  }
+
+  /**
+   * Create E-Wallet
+   */
+  public function CreateEwallet(Request $request)
+  {
+    $response = new ResponseApi;
+    $validated = Validator::make($request->all(), [
+      'reference_id' => 'required',
+      'amount' => 'required',
+      'channel_code' => 'required',
+      'channel_properties' => 'required',
+    ]);
+
+    if ($validated->fails()) {
+      $response->setStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY);
+      $response->title('Payment');
+      $response->message('Failed');
+      $response->formError($validated->errors());
+      return $response;
+    }
+    $createEwallet = Xendit::EwalletCreate($request->reference_id, $request->amount, $request->channel_code, $request->channel_properties);
+    if ($createEwallet) {
+      $payment = new Payment;
+      $payment->external_id = $createEwallet->reference_id;
+      $payment->user_id = auth()->user()->id;
+      $payment->channel = 'EWALLET';
+      $payment->code = $createEwallet->channel_code;
+      $payment->account_number = $createEwallet->channel_properties->mobile_number ?? null;
+      $payment->expected_amount = $createEwallet->charge_amount;
+      $payment->status = $createEwallet->status;
+      $payment->save();
+
+      $datas = [
+        'account' => $payment,
+        'actions' => $createEwallet->actions ?? null,
+        'channel_properties' => $createEwallet->channel_properties ?? null,
+        'callback_url' => $createEwallet->callback_url ?? null
+      ];
+
+      // response success
+      $response->setStatusCode(Response::HTTP_CREATED);
+      $response->title('Payment');
+      $response->message('Created');
+      $response->data($datas);
+      return $response;
+    }
+
+    // response failed
+    $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+    $response->title('Payment');
+    $response->message('Failed');
+    $response->data(null);
+    return $response;
+  }
+
+  /**
+   * Callback E-Wallet
+   */
+  public function CallbackEwalletPaid(Request $request)
+  {
+    $response = new ResponseApi;
+
+    /**
+     * check token webhook from xendit
+     * token can be get from environment XENDIT_CALLBACK_TOKEN
+     */
+    if ($request->header('X-CALLBACK-TOKEN') != env('XENDIT_CALLBACK_TOKEN')) {
+      // response failed
+      $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
+      $response->title('who are you?');
+      $response->message('UNAUTHORIZED');
+      $response->data(null);
+      return $response;
+    }
+    DB::transaction(function () use ($request) {
+      // update payment to paid
+      $payment = Payment::where('external_id', $request->data['reference_id'])->first();
+      $payment->status = 'PAID';
+      $payment->save();
+
+      // update transaction to paid
+      $transaction = Transaction::where('transaction_code', $request->data['reference_id'])->first();
       $transaction->status = 'PAID';
       $transaction->save();
 

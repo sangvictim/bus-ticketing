@@ -292,6 +292,29 @@ class DatabaseSeeder extends Seeder
       ]
     ];
 
+    $ewallets = [
+      [
+        'name' => 'OVO',
+        'code' => 'ID_OVO',
+        'sort' => 0
+      ],
+      [
+        'name' => 'DANA',
+        'code' => 'ID_DANA',
+        'sort' => 1
+      ],
+      [
+        'name' => 'SHOPEEPAY',
+        'code' => 'ID_SHOPEEPAY',
+        'sort' => 2
+      ],
+      [
+        'name' => 'LINKAJA',
+        'code' => 'ID_LINKAJA',
+        'sort' => 3
+      ]
+    ];
+
     foreach ($channels as $key => $value) {
       PaymentMethod::create([
         'name' => $value['name'],
@@ -311,6 +334,18 @@ class DatabaseSeeder extends Seeder
         'code' => $value->code,
         'country' => $value->country,
         'currency' => $value->currency,
+      ]);
+    }
+
+    foreach ($ewallets as $key => $value) {
+      PaymentMethod::create([
+        'parent' => 3,
+        'icon' => 'https://placehold.co/600x400',
+        'name' => $value['name'],
+        'code' => $value['code'],
+        'sort' => $value['sort'],
+        'country' => 'ID',
+        'currency' => 'IDR'
       ]);
     }
   }

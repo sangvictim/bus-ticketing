@@ -17,11 +17,10 @@ return new class extends Migration
             $table->string('external_id')->unique()->references('transaction_code')->on('transactions');
             $table->string('channel');
             $table->string('code');
-            $table->string('name');
+            $table->string('name')->nullable();
             $table->string('account_number')->nullable();
             $table->string('status');
             $table->double('expected_amount');
-            $table->json('properties')->nullable();
             $table->timestamps();
         });
     }
