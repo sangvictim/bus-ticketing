@@ -41,6 +41,7 @@ class TransactionResource extends Resource
     {
         return $table
             ->columns([
+                TextColumn::make('status')->searchable(),
                 TextColumn::make('transaction_code')->searchable(),
                 TextColumn::make('total_price')->searchable(),
                 TextColumn::make('originCity.name')->searchable(),
