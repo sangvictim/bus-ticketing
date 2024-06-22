@@ -9,6 +9,7 @@ use App\Models\Payment;
 use App\Models\PaymentMethod;
 use App\Models\Transaction;
 use App\Models\UserNotification;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
@@ -19,7 +20,7 @@ class PaymentController extends Controller
   /**
    * Get list payment method with group by parent
    */
-  public function list()
+  public function list(): JsonResponse
   {
     $listPayment = PaymentMethod::where('isActivated', 1)->with(['childrens'])->whereNull('parent')->get();
     $data = $listPayment->map(function ($item) {
@@ -52,7 +53,7 @@ class PaymentController extends Controller
   /**
    * Create Virtual Account
    */
-  public function createVA(Request $request)
+  public function createVA(Request $request): JsonResponse
   {
     $validated = Validator::make($request->all(), [
       'external_id' => 'required',
@@ -104,7 +105,7 @@ class PaymentController extends Controller
   /**
    * Callback Virtual Account
    */
-  public function callbackVirtualAccountPaid(Request $request)
+  public function callbackVirtualAccountPaid(Request $request): JsonResponse
   {
     $response = new ResponseApi;
 
@@ -150,7 +151,7 @@ class PaymentController extends Controller
   /**
    * Create E-Wallet
    */
-  public function CreateEwallet(Request $request)
+  public function CreateEwallet(Request $request): JsonResponse
   {
     $response = new ResponseApi;
     $validated = Validator::make($request->all(), [
@@ -205,7 +206,7 @@ class PaymentController extends Controller
   /**
    * Callback E-Wallet
    */
-  public function CallbackEwalletPaid(Request $request)
+  public function CallbackEwalletPaid(Request $request): JsonResponse
   {
     $response = new ResponseApi;
 
