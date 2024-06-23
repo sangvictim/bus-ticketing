@@ -50,7 +50,12 @@ class BookingController extends Controller
   public function cities()
   {
     $cities = City::select('id', 'name')->get();
-
+    $cities = $cities->map(function ($city) {
+      return [
+        'value' => strval($city->id),
+        'label' => $city->name
+      ];
+    });
     $result = new ResponseApi;
     $result->setStatusCode(Response::HTTP_OK);
     $result->title('Cities');
