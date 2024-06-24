@@ -87,6 +87,7 @@ class ResponseApi extends JsonResponse
 
   public function setHeader(array $headers): static
   {
-    return $this->withHeaders($headers);
+    $header = array_merge(['Access-Control-Allow-Origin' => '*'], $headers);
+    return $this->withHeaders($header);
   }
 }
