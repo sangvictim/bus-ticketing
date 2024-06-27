@@ -18,7 +18,7 @@ class AuthController extends Controller
    *
    * @return \Illuminate\Http\JsonResponse
    */
-  public function register(): JsonResponse
+  public function register()
   {
     $result = new ResponseApi;
     $validator = Validator::make(request()->all(), [
@@ -57,7 +57,7 @@ class AuthController extends Controller
   /**
    * Get a JWT via given credentials.
    */
-  public function login(Request $request): JsonResponse
+  public function login(Request $request)
   {
     $result = new ResponseApi;
     $credentials = $request->only('email', 'password');
