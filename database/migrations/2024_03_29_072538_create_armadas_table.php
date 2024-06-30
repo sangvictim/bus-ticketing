@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('production_year');
             $table->integer('capacity');
             $table->string('status');
-            $table->timestamps();
+            $table->timestampsTz();
         });
     }
 

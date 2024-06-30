@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('discount_type')->nullable();
             $table->dateTime('start_date')->nullable();
             $table->dateTime('end_date')->nullable();
-            $table->timestamps();
+            $table->timestampsTz();
         });
     }
 

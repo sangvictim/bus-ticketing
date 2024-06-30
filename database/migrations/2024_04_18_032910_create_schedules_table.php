@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('armada_id')->constrained('armadas');
             $table->time('departure_time');
             $table->time('arrival_time');
-            $table->timestamps();
+            $table->timestampsTz();
         });
     }
 

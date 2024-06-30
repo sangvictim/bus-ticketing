@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('seat_number');
             $table->string('description')->nullable();
             $table->string('isActive')->default(1);
-            $table->timestamps();
+            $table->timestampsTz();
         });
     }
 

@@ -22,7 +22,7 @@ return new class extends Migration
       $table->string('currency');
       $table->boolean('isActivated')->default(true);
       $table->integer('sort')->nullable();
-      $table->timestamps();
+      $table->timestampsTz();
     });
   }
 

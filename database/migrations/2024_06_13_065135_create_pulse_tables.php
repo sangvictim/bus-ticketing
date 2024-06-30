@@ -11,13 +11,13 @@ return new class extends PulseMigration
      */
     public function up(): void
     {
-        if (! $this->shouldRun()) {
+        if (!$this->shouldRun()) {
             return;
         }
 
         Schema::create('pulse_values', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('timestamp');
+            $table->unsignedInteger('timestampsTz');
             $table->string('type');
             $table->mediumText('key');
             match ($this->driver()) {
@@ -27,14 +27,14 @@ return new class extends PulseMigration
             };
             $table->mediumText('value');
 
-            $table->index('timestamp'); // For trimming...
+            $table->index('timestampsTz'); // For trimming...
             $table->index('type'); // For fast lookups and purging...
             $table->unique(['type', 'key_hash']); // For data integrity and upserts...
         });
 
         Schema::create('pulse_entries', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('timestamp');
+            $table->unsignedInteger('timestampsTz');
             $table->string('type');
             $table->mediumText('key');
             match ($this->driver()) {
@@ -44,10 +44,10 @@ return new class extends PulseMigration
             };
             $table->bigInteger('value')->nullable();
 
-            $table->index('timestamp'); // For trimming...
+            $table->index('timestampsTz'); // For trimming...
             $table->index('type'); // For purging...
             $table->index('key_hash'); // For mapping...
-            $table->index(['timestamp', 'type', 'key_hash', 'value']); // For aggregate queries...
+            $table->index(['timestampsTz', 'type', 'key_hash', 'value']); // For aggregate queries...
         });
 
         Schema::create('pulse_aggregates', function (Blueprint $table) {

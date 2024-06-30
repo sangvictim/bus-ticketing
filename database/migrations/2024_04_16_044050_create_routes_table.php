@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('destination_city')->references('id')->on('cities');
             $table->integer('estimated_duration')->nullable();
             $table->boolean('isActive')->default(1);
-            $table->timestamps();
+            $table->timestampsTz();
         });
     }
 

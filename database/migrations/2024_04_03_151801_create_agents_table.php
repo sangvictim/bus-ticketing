@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('contact_name');
             $table->string('mobile_phone');
             $table->boolean('isActive')->default(1);
-            $table->timestamps();
+            $table->timestampsTz();
         });
     }
 

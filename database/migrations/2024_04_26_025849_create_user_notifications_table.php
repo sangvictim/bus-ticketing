@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('body');
             $table->string('collapseKey')->nullable();
             $table->timestamp('read_at')->nullable();
-            $table->timestamps();
+            $table->timestampsTz();
         });
     }
 

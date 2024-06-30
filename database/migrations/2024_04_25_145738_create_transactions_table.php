@@ -26,7 +26,7 @@ return new class extends Migration
             $table->string('armada_name');
             $table->string('armada_class');
             $table->string('armada_seat');
-            $table->timestamps();
+            $table->timestampsTz();
         });
     }
 

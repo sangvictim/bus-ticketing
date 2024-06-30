@@ -3,17 +3,13 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\TransactionResource\Pages;
-use App\Filament\Resources\TransactionResource\RelationManagers;
 use App\Models\Transaction;
-use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Tables\Filters\Filter;
 
 class TransactionResource extends Resource
@@ -43,11 +39,11 @@ class TransactionResource extends Resource
             ->columns([
                 TextColumn::make('status')->searchable(),
                 TextColumn::make('transaction_code')->searchable(),
-                TextColumn::make('total_price')->searchable(),
+                TextColumn::make('total_price')->money('IDR')->searchable(),
+                TextColumn::make('updated_at')->searchable(),
                 TextColumn::make('originCity.name')->searchable(),
                 TextColumn::make('destinationCity.name')->searchable(),
                 TextColumn::make('armada_code')->searchable(),
-                TextColumn::make('armada_name')->searchable(),
             ])
             ->filters([
                 Filter::make('created_at')

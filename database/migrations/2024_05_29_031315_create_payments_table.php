@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('account_number')->nullable();
             $table->string('status');
             $table->double('expected_amount');
-            $table->timestamps();
+            $table->timestampsTz();
         });
     }
 

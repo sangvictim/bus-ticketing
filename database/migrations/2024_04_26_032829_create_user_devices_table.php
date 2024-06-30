@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('userAgent')->nullable();
             $table->string('fcmToken')->nullable();
             $table->string('fingerprint')->nullable();
-            $table->timestamps();
+            $table->timestampsTz();
         });
     }
 
