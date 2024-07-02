@@ -31,7 +31,7 @@ services:
     restart: unless-stopped
     tty: true
     ports:
-      - "80:80"
+      - "8000:80"
       - "443:443"
     networks:
       - bridge
@@ -41,19 +41,19 @@ services:
       - ./:/var/www/bus-ticketing
       - ./nginx/conf.d/:/etc/nginx/conf.d/
 
-  #MySQL Service
+  #postgres Service
   db:
-    image: mysql:8.3.0
+    image: postgres:16.3
     container_name: db-ticketing
     restart: unless-stopped
     tty: true
     ports:
-      - "3306:3306"
+      - "5432:5432"
     environment:
-      MYSQL_DATABASE: toketing
-      MYSQL_ROOT_PASSWORD: 123456
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
       SERVICE_TAGS: dev
-      SERVICE_NAME: mysql
+      SERVICE_NAME: pgsql
     networks:
       - bridge
 
