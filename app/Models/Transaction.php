@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Closure;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -26,6 +25,8 @@ class Transaction extends Model
         'armada_name',
         'armada_class',
         'armada_seat',
+        'departure',
+        'checkin',
     ];
 
     /**
@@ -52,7 +53,7 @@ class Transaction extends Model
         return $this->belongsTo(City::class, 'destination_city');
     }
 
-    public function classArmada(): BelongsTo
+    public function armadaClass(): BelongsTo
     {
         return $this->belongsTo(Classes::class, 'armada_class');
     }

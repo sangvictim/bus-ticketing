@@ -10,7 +10,6 @@ use App\Models\Transaction;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class BookingController extends Controller
@@ -72,10 +71,24 @@ class BookingController extends Controller
    */
   public function history(): JsonResponse
   {
+    $transactions = Transaction::where('user_id', auth()->user()->id)->with([
+      'user' => function ($query) {
+        $query->select('id', 'name');
+      },
+      'originCity' => function ($query) {
+        $query->select('id', 'name');
+      },
+      'destinationCity' => function ($query) {
+        $query->select('id', 'name');
+      },
+      'armadaClass' => function ($query) {
+        $query->select('id', 'name');
+      }
+    ])->get();
     $result = new ResponseApi;
     $result->setStatusCode(Response::HTTP_OK);
     $result->title('History Transaction');
-    $result->data(auth()->user()->transactions);
+    $result->data($transactions);
     return $result;
   }
 
