@@ -160,6 +160,7 @@ class BookingController extends Controller
     $transaction->armada_name = $request->armada_name;
     $transaction->armada_class = $request->armada_class;
     $transaction->armada_seat = $request->armada_seat;
+    $transaction->departure = $request->departure;
     $transaction->save();
 
     $result->setStatusCode(Response::HTTP_CREATED);
