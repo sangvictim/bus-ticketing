@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Transaction extends Model
 {
@@ -14,19 +15,14 @@ class Transaction extends Model
     protected $fillable = [
         'user_id',
         'transaction_code',
+        'payment_method',
         'status',
-        'total_price',
-        'price',
-        'discount',
-        'discount_type',
+        'total_amount',
         'origin_city',
         'destination_city',
-        'armada_code',
-        'armada_name',
-        'armada_class',
-        'armada_seat',
         'departure',
         'checkin',
+        'checkout'
     ];
 
     /**
@@ -53,8 +49,13 @@ class Transaction extends Model
         return $this->belongsTo(City::class, 'destination_city');
     }
 
-    public function armadaClass(): BelongsTo
+    public function paymentMethod(): BelongsTo
     {
-        return $this->belongsTo(Classes::class, 'armada_class');
+        return $this->belongsTo(PaymentMethod::class, 'payment_method');
+    }
+
+    public function details(): HasMany
+    {
+        return $this->hasMany(TransactionDetails::class);
     }
 }

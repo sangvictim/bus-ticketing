@@ -15,19 +15,14 @@ return new class extends Migration
             $table->ulid('id')->primary();
             $table->foreignUlid('user_id')->constrained('users');
             $table->string('transaction_code')->unique()->index();
+            $table->unsignedBigInteger('payment_method')->nullable()->references('id')->on('payment_methods');
             $table->string('status'); // cancel, booking, paid
-            $table->double('total_price');
-            $table->double('price')->nullable();
-            $table->double('discount')->nullable();
-            $table->string('discount_type')->nullable();
+            $table->double('total_amount');
             $table->foreignId('origin_city')->references('id')->on('cities');
             $table->foreignId('destination_city')->references('id')->on('cities');
-            $table->string('armada_code');
-            $table->string('armada_name');
-            $table->string('armada_class');
-            $table->string('armada_seat');
             $table->dateTimeTz('departure')->nullable();
             $table->dateTimeTz('checkin')->nullable();
+            $table->dateTimeTz('checkout')->nullable();
             $table->timestampsTz();
         });
     }

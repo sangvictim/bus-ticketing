@@ -17,14 +17,10 @@ class TransactionFactory extends Factory
     public function definition(): array
     {
         return [
-            "total_price" => 300000,
-            "price" => 300000,
+            "total_amount" => 600000,
             "origin_city" => 42,
             "destination_city" => 57,
-            "armada_code" => 123,
-            "armada_name" => "kuda bringas",
-            "armada_class" => "executive",
-            "armada_seat" => "1A"
+            "status" => "BOOKED"
         ];
     }
 }

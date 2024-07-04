@@ -250,14 +250,16 @@ class DatabaseSeeder extends Seeder
         "user_id" => $user->id,
         "transaction_code" => "TRIP-" . $microtime,
         "status" => "BOOKED",
-        "total_price" => 300000,
-        "price" => 300000,
+        "total_amount" => 600000,
         "origin_city" => 42,
         "destination_city" => 57,
-        "armada_code" => $armada->code,
-        "armada_name" => $armada->name,
-        "armada_class" => $armada->classes[0],
-        "armada_seat" => "1A"
+      ])->details()->create([
+        'passager_name' => $user->name,
+        'price' => 300000,
+        'armada_code' => $armada->code,
+        'armada_name' => $armada->name,
+        'armada_class' => $armada->classes->first()->name,
+        'seat_number' => '1A'
       ]);
     }
 
