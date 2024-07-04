@@ -18,6 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('payment_method')->nullable()->references('id')->on('payment_methods');
             $table->string('status'); // cancel, booking, paid
             $table->double('total_amount');
+            $table->integer('qty_passanger');
             $table->foreignId('origin_city')->references('id')->on('cities');
             $table->foreignId('destination_city')->references('id')->on('cities');
             $table->dateTimeTz('departure')->nullable();

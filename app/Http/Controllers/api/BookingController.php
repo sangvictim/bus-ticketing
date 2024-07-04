@@ -10,6 +10,7 @@ use App\Models\Transaction;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class BookingController extends Controller
@@ -75,15 +76,7 @@ class BookingController extends Controller
       'user' => function ($query) {
         $query->select('id', 'name');
       },
-      'originCity' => function ($query) {
-        $query->select('id', 'name');
-      },
-      'destinationCity' => function ($query) {
-        $query->select('id', 'name');
-      },
-      'armadaClass' => function ($query) {
-        $query->select('id', 'name');
-      }
+      'details',
     ])->get();
     $result = new ResponseApi;
     $result->setStatusCode(Response::HTTP_OK);
@@ -96,6 +89,7 @@ class BookingController extends Controller
    * Get the seat.
    * @param  \Illuminate\Http\Request  $request
    * @return \Illuminate\Http\JsonResponse
+   * TODO: check availability seat where transaction
    */
   public function seat(Request $request): JsonResponse
   {
@@ -108,7 +102,7 @@ class BookingController extends Controller
       $result->data(null);
       return $result;
     }
-    $transaction->armada_seat = $request->armada_seat;
+    $transaction->seat_number = $request->seat_number;
     $transaction->save();
 
     $result->title('Seat Updated');
@@ -129,13 +123,16 @@ class BookingController extends Controller
     }
 
     $validator = Validator::make($request->all(), [
-      'total_price' => 'required',
+      'total_amount' => 'required',
       'origin_city' => 'required',
       'destination_city' => 'required',
-      'armada_code' => 'required',
-      'armada_name' => 'required',
-      'armada_class' => 'required',
-      'armada_seat' => 'required',
+      'qty_passanger' => 'required',
+      'details.*.passager_name' => 'required',
+      'details.*.price' => 'required',
+      'details.*.armada_code' => 'required',
+      'details.*.armada_name' => 'required',
+      'details.*.armada_class' => 'required',
+      'details.*.seat_number' => 'required',
     ]);
 
     if ($validator->fails()) {
@@ -145,28 +142,25 @@ class BookingController extends Controller
       $result->formError($validator->errors());
       return $result;
     }
+    DB::transaction(function () use ($request, $result) {
+      $transaction =  new Transaction;
+      $transaction->user_id = auth()->user()->id;
+      $transaction->transaction_code = 'TRIP-' . microtime(true);
+      $transaction->status = 'BOOKED';
+      $transaction->total_amount = $request->total_amount;
+      $transaction->qty_passanger = $request->qty_passanger;
+      $transaction->origin_city = $request->origin_city;
+      $transaction->destination_city = $request->destination_city;
+      $transaction->departure = $request->departure;
+      $transaction->save();
 
-    $transaction =  new Transaction;
-    $transaction->status = 'BOOKED';
-    $transaction->user_id = auth()->user()->id;
-    $transaction->transaction_code = 'TRIP-' . microtime(true);
-    $transaction->total_price = $request->total_price;
-    $transaction->price = $request->price;
-    $transaction->discount = $request->discount;
-    $transaction->discount_type = $request->discount_type;
-    $transaction->origin_city = $request->origin_city;
-    $transaction->destination_city = $request->destination_city;
-    $transaction->armada_code = $request->armada_code;
-    $transaction->armada_name = $request->armada_name;
-    $transaction->armada_class = $request->armada_class;
-    $transaction->armada_seat = $request->armada_seat;
-    $transaction->departure = $request->departure;
-    $transaction->save();
+      $transaction->details()->createMany($request->details);
 
-    $result->setStatusCode(Response::HTTP_CREATED);
-    $result->message('Transaction Created');
-    $result->title('Transaction');
-    $result->data($transaction);
-    return $result;
+      $result->setStatusCode(Response::HTTP_CREATED);
+      $result->message('Transaction Created');
+      $result->title('Transaction');
+      $result->data($transaction);
+      return $result;
+    });
   }
 }

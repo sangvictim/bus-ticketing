@@ -17,6 +17,7 @@ class TransactionFactory extends Factory
     public function definition(): array
     {
         return [
+            "qty_passanger" => 1,
             "total_amount" => 600000,
             "origin_city" => 42,
             "destination_city" => 57,

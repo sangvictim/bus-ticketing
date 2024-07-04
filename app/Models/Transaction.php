@@ -18,6 +18,7 @@ class Transaction extends Model
         'payment_method',
         'status',
         'total_amount',
+        'qty_passanger',
         'origin_city',
         'destination_city',
         'departure',

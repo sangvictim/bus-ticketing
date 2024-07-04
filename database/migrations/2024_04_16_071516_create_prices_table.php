@@ -20,8 +20,8 @@ return new class extends Migration
             $table->string('cut_of_price')->nullable();
             $table->string('discount')->nullable();
             $table->string('discount_type')->nullable();
-            $table->dateTime('start_date')->nullable();
-            $table->dateTime('end_date')->nullable();
+            $table->dateTimeTz('start_date')->nullable();
+            $table->dateTimeTz('end_date')->nullable();
             $table->timestampsTz();
         });
     }

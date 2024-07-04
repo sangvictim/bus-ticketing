@@ -24,15 +24,10 @@ class ViewTransaction extends ViewRecord
             Section::make('Transaction')->schema([
                 TextEntry::make('status')->label('Transaction Status'),
                 TextEntry::make('transaction_code')->label('Transaction Code'),
-                TextEntry::make('total_price')->label('Total Price')->money('IDR'),
+                TextEntry::make('total_amount')->label('Total Price')->money('IDR'),
                 TextEntry::make('updated_at')->label('Transaction Date'),
                 TextEntry::make('originCity.name')->label('Origin City'),
-                TextEntry::make('destinationCity.name')->label('Destination City'),
-                TextEntry::make('armada_code')->label('Armada Code'),
-                TextEntry::make('armada_name')->label('Armada Name'),
-                TextEntry::make('classArmada.name')->label('Armada Class'),
-                TextEntry::make('armada_seat')->label('Armada Seat'),
-
+                TextEntry::make('destinationCity.name')->label('Destination City')
             ])->columns(4)
         ]);
     }

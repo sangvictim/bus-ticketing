@@ -39,11 +39,9 @@ class TransactionResource extends Resource
             ->columns([
                 TextColumn::make('status')->searchable(),
                 TextColumn::make('transaction_code')->searchable(),
-                TextColumn::make('total_price')->money('IDR')->searchable(),
-                TextColumn::make('updated_at')->searchable(),
-                TextColumn::make('originCity.name')->searchable(),
-                TextColumn::make('destinationCity.name')->searchable(),
-                TextColumn::make('armada_code')->searchable(),
+                TextColumn::make('total_amount')->money('IDR')->searchable(),
+                TextColumn::make('user.name')->searchable(),
+                TextColumn::make('updated_at')->searchable()
             ])
             ->filters([
                 Filter::make('created_at')
