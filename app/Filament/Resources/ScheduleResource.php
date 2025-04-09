@@ -3,9 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ScheduleResource\Pages;
-use App\Filament\Resources\ScheduleResource\RelationManagers;
-use App\Models\Schedule;
-use Filament\Forms;
+use App\Models\Cms\Schedule;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TimePicker;
 use Filament\Forms\Form;
@@ -17,8 +15,6 @@ use Filament\Tables;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class ScheduleResource extends Resource
 {
@@ -38,7 +34,7 @@ class ScheduleResource extends Resource
         return $form
             ->schema([
                 Select::make('route_id')->relationship('route', 'name')->searchable()->preload()->required(),
-                Select::make('armada_id')->relationship('armada', 'code')->searchable()->preload()->required(),
+                Select::make('buses_id')->relationship('buses', 'code')->searchable()->preload()->required(),
                 TimePicker::make('arrival_time')->required(),
                 TimePicker::make('departure_time')->required(),
             ]);
@@ -49,7 +45,7 @@ class ScheduleResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('route.name')->searchable(),
-                TextColumn::make('armada.code')->description(fn ($record) => $record->armada->name),
+                TextColumn::make('buses.code')->description(fn($record) => $record->buses->name),
                 TextColumn::make('arrival_time'),
                 TextColumn::make('departure_time'),
             ])

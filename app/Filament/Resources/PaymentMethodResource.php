@@ -3,7 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\PaymentMethodResource\Pages;
-use App\Models\PaymentMethod;
+use App\Models\Cms\PaymentMethod;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -52,11 +52,11 @@ class PaymentMethodResource extends Resource
   {
     return $table
       ->columns([
-        ImageColumn::make('icon')->label('Icon')->visible(fn ($livewire) => $livewire->activeTab !== 'parent'),
+        ImageColumn::make('icon')->label('Icon')->visible(fn($livewire) => $livewire->activeTab !== 'parent'),
         TextColumn::make('parents.name')
           ->label('Channels')
           ->searchable()
-          ->visible(fn ($livewire) => $livewire->activeTab !== 'parent'),
+          ->visible(fn($livewire) => $livewire->activeTab !== 'parent'),
         TextColumn::make('name')->searchable(),
         TextColumn::make('code')->searchable(),
       ])

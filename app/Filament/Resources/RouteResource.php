@@ -3,8 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\RouteResource\Pages;
-use App\Models\City;
-use App\Models\Route;
+use App\Models\Cms\Route;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;

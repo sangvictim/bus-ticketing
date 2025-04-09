@@ -3,9 +3,9 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\PriceResource\Pages;
-use App\Models\Classes;
-use App\Models\Price;
-use App\Models\Route;
+use App\Models\Cms\Classes;
+use App\Models\Cms\Price;
+use App\Models\Cms\Route;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Select;

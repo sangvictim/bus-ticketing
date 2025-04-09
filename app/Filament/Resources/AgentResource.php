@@ -3,7 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\AgentResource\Pages;
-use App\Models\Agent;
+use App\Models\Cms\Agent;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Split;
 use Filament\Forms\Components\Textarea;
@@ -53,7 +53,7 @@ class AgentResource extends Resource
                 IconColumn::make('isActive')->label('Active')->boolean(),
                 TextColumn::make('city.name')->label('City')->searchable(),
                 TextColumn::make('name')->searchable(),
-                TextColumn::make('contact_name')->description(fn (Agent $record) => $record->mobile_phone),
+                TextColumn::make('contact_name')->description(fn(Agent $record) => $record->mobile_phone),
                 TextColumn::make('address')->limit(50),
             ])
             ->filters([

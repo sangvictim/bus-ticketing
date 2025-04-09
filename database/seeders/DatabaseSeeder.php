@@ -2,20 +2,19 @@
 
 namespace Database\Seeders;
 
-use App\Models\Admin;
-use App\Models\Agent;
-use App\Models\Armada;
-use App\Models\City;
-use App\Models\Classes;
-use App\Models\Facility;
-use App\Models\PaymentMethod;
-use App\Models\Permission;
-use App\Models\Price;
-use App\Models\Role;
-use App\Models\Route;
-use App\Models\Schedule;
-use App\Models\Seat;
-use App\Models\Transaction;
+use App\Models\Cms\Admin;
+use App\Models\Cms\Agent;
+use App\Models\Cms\Buses;
+use App\Models\Cms\City;
+use App\Models\Cms\Classes;
+use App\Models\Cms\Facility;
+use App\Models\Cms\PaymentMethod;
+use App\Models\Cms\Permission;
+use App\Models\Cms\Price;
+use App\Models\Cms\Role;
+use App\Models\Cms\Route;
+use App\Models\Cms\Schedule;
+use App\Models\Cms\Seat;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -27,26 +26,77 @@ class DatabaseSeeder extends Seeder
    */
   public function run(): void
   {
-    // \App\Models\User::factory(10)->create();
     $permission =
       [
         "*",
-        "permission.*", "permission.view",
-        "role.*", "role.create", "role.view", "role.update", "role.delete",
-        "admin.*", "admin.create", "admin.view", "admin.update", "admin.delete",
-        "log.*", "log.view",
-        "payment-method.*", "payment-method.create", "payment-method.view", "payment-method.update", "payment-method.delete",
-        "transaction.*", "transaction.view",
-        "user.*", "user.view",
-        "agent.*", "agent.create", "agent.view", "agent.update", "agent.delete",
-        "city.*", "city.create", "city.view", "city.update", "city.delete",
-        "price.*", "price.create", "price.view", "price.update", "price.delete",
-        "routes.*", "routes.create", "routes.view", "routes.update", "routes.delete",
-        "schedule.*", "schedule.create", "schedule.view", "schedule.update", "schedule.delete",
-        "armada.*", "armada.create", "armada.view", "armada.update", "armada.delete",
-        "class-armada.*", "class-armada.create", "class-armada.view", "class-armada.update", "class-armada.delete",
-        "facility.*", "facility.create", "facility.view", "facility.update", "facility.delete",
-        "seat.*", "seat.create", "seat.view", "seat.update", "seat.delete",
+        "permission.*",
+        "permission.view",
+        "role.*",
+        "role.create",
+        "role.view",
+        "role.update",
+        "role.delete",
+        "admin.*",
+        "admin.create",
+        "admin.view",
+        "admin.update",
+        "admin.delete",
+        "log.*",
+        "log.view",
+        "payment-method.*",
+        "payment-method.create",
+        "payment-method.view",
+        "payment-method.update",
+        "payment-method.delete",
+        "transaction.*",
+        "transaction.view",
+        "user.*",
+        "user.view",
+        "agent.*",
+        "agent.create",
+        "agent.view",
+        "agent.update",
+        "agent.delete",
+        "city.*",
+        "city.create",
+        "city.view",
+        "city.update",
+        "city.delete",
+        "price.*",
+        "price.create",
+        "price.view",
+        "price.update",
+        "price.delete",
+        "routes.*",
+        "routes.create",
+        "routes.view",
+        "routes.update",
+        "routes.delete",
+        "schedule.*",
+        "schedule.create",
+        "schedule.view",
+        "schedule.update",
+        "schedule.delete",
+        "bus.*",
+        "bus.create",
+        "bus.view",
+        "bus.update",
+        "bus.delete",
+        "bus-classes.*",
+        "bus-classes.create",
+        "bus-classes.view",
+        "bus-classes.update",
+        "bus-classes.delete",
+        "facility.*",
+        "facility.create",
+        "facility.view",
+        "facility.update",
+        "facility.delete",
+        "seat.*",
+        "seat.create",
+        "seat.view",
+        "seat.update",
+        "seat.delete",
       ];
 
     for ($i = 0; $i < count($permission); $i++) {
@@ -77,9 +127,9 @@ class DatabaseSeeder extends Seeder
       'password' => bcrypt(123), //123
     ])->assignRole(2);
 
-    User::factory(10)->create();
+    User::factory(25)->create();
 
-    Armada::factory(50)->create();
+    Buses::factory(50)->create();
 
     $fasilitas = [
       'Reclining Seat 1-1(2)',
@@ -143,11 +193,10 @@ class DatabaseSeeder extends Seeder
       $class->seats()->attach($seat);
     });
 
-    Armada::all()->each(function ($armada) {
+    Buses::all()->each(function ($bus) {
       $classes = Classes::all()->random(3)->pluck('id');
-      $armada->classes()->attach($classes);
+      $bus->classes()->attach($classes);
     });
-
 
     /**
      * seeder untuk kota dan agen
@@ -170,56 +219,66 @@ class DatabaseSeeder extends Seeder
     $routes = [
       [
         "name" => "TANGERANG - PEMALANG",
-        "origin_city" => 57,
-        "destination_city" => 42,
+        "origin_city" => "TANGERANG",
+        "destination_city" => "PEMALANG",
         "estimated_duration" => 380
       ],
       [
         "name" => "PEMALANG - TANGERANG",
-        "origin_city" => 42,
-        "destination_city" => 57,
+        "origin_city" => "PEMALANG",
+        "destination_city" => "TANGERANG",
         "estimated_duration" => 380
       ],
       [
         "name" => "TANGERANG - PURBALINGGA",
-        "origin_city" => 57,
-        "destination_city" => 47,
+        "origin_city" => "TANGERANG",
+        "destination_city" => "PURBALINGGA",
         "estimated_duration" => 380
       ],
       [
         "name" => "PURBALINGGA - TANGERANG",
-        "origin_city" => 47,
-        "destination_city" => 57,
+        "origin_city" => "PURBALINGGA",
+        "destination_city" => "TANGERANG",
         "estimated_duration" => 380
       ],
       [
         "name" => "TANGERANG - PURWOKERTO",
-        "origin_city" => 57,
-        "destination_city" => 48,
+        "origin_city" => "TANGERANG",
+        "destination_city" => "PURWOKERTO",
         "estimated_duration" => 380
       ],
       [
         "name" => "PURWOKERTO - TANGERANG",
-        "origin_city" => 48,
-        "destination_city" => 57,
+        "origin_city" => "PURWOKERTO",
+        "destination_city" => "TANGERANG",
         "estimated_duration" => 380
       ],
       [
         "name" => "TANGERANG - CILACAP",
-        "origin_city" => 57,
-        "destination_city" => 12,
+        "origin_city" => "TANGERANG",
+        "destination_city" => "CILACAP",
         "estimated_duration" => 380
       ],
       [
         "name" => "CILACAP - TANGERANG",
-        "origin_city" => 12,
-        "destination_city" => 57,
+        "origin_city" => "CILACAP",
+        "destination_city" => "TANGERANG",
         "estimated_duration" => 380
       ],
     ];
 
     foreach ($routes as $key => $value) {
-      Route::create($value);
+      $cityOrigin = City::where('name', $value['origin_city'])->first();
+      $cityDestination = City::where('name', $value['destination_city'])->first();
+
+      if ($cityOrigin && $cityDestination) {
+        Route::create([
+          'name' => $value['name'],
+          'origin_city' => $cityOrigin->id,
+          'destination_city' => $cityDestination->id,
+          'estimated_duration' => $value['estimated_duration']
+        ]);
+      }
     }
 
     $routes = Route::all();
@@ -234,32 +293,12 @@ class DatabaseSeeder extends Seeder
     }
 
     foreach ($routes as $key => $value) {
+      $bus = Buses::all()->random(1)->first();
       Schedule::factory()->create([
         'route_id' => $value->id,
-        'armada_id' => $key + 1,
+        'buses_id' => $bus->id,
         'arrival_time' => '0' . ($key + 5) . ':00:00',
         'departure_time' => '0' . ($key + 5) . ':15:00',
-      ]);
-    }
-
-    $users = User::all();
-    foreach ($users as $key => $user) {
-      $armada = Armada::inRandomOrder()->first();
-      $microtime = microtime(true);
-      Transaction::factory()->create([
-        "user_id" => $user->id,
-        "transaction_code" => "TRIP-" . $microtime,
-        "status" => "BOOKED",
-        "total_amount" => 600000,
-        "origin_city" => 42,
-        "destination_city" => 57,
-      ])->details()->create([
-        'passager_name' => $user->name,
-        'price' => 300000,
-        'armada_code' => $armada->code,
-        'armada_name' => $armada->name,
-        'armada_class' => $armada->classes->first()->name,
-        'seat_number' => '1A'
       ]);
     }
 

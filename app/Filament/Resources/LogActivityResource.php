@@ -3,7 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\LogActivityResource\Pages;
-use App\Models\Activity;
+use App\Models\Cms\Activity;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -42,7 +42,7 @@ class LogActivityResource extends Resource
             ->columns([
                 TextColumn::make('log_name')->label('Log Name')->searchable(),
                 TextColumn::make('description')->label('Description')->searchable()
-                    ->description(fn (Activity $record) => $record->causer->name ?? 'Unknown' . ' ' . $record->event . ' ' . $record->log_name . ' ' . $record->subject->name),
+                    ->description(fn(Activity $record) => $record->causer->name ?? 'Unknown' . ' ' . $record->event . ' ' . $record->log_name . ' ' . $record->subject->name),
                 TextColumn::make('created_at')->label('Created At')
             ])
             ->filters([
@@ -55,11 +55,11 @@ class LogActivityResource extends Resource
                         return $query
                             ->when(
                                 $data['created_from'],
-                                fn (Builder $query, $date): Builder => $query->whereDate('created_at', '>=', $date),
+                                fn(Builder $query, $date): Builder => $query->whereDate('created_at', '>=', $date),
                             )
                             ->when(
                                 $data['created_until'],
-                                fn (Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
+                                fn(Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
                             );
                     })
             ]);

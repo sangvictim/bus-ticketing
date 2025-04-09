@@ -3,8 +3,8 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\RoleResource\Pages;
-use App\Models\Permission;
-use App\Models\Role;
+use App\Models\Cms\Permission;
+use App\Models\Cms\Role;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Section;
@@ -52,14 +52,14 @@ class RoleResource extends Resource
                     ->relationship(
                         'users',
                         'name',
-                        fn ($query) => //
+                        fn($query) => //
                         $query->take(config('base.records_limit.users')),
                     )
                     ->multiple()
                     ->searchable()
                     ->preload()
                     ->getOptionLabelFromRecordUsing(
-                        fn ($record) => //
+                        fn($record) => //
                         "{$record->name} — {$record->email}",
                     ),
             ]),
@@ -75,24 +75,24 @@ class RoleResource extends Resource
                                 Checkbox::make('permissions.god_mode')
                                     ->label(__('SUPERADMIN - ALL ACCESS'))
                                     ->helperText(__('Special permission to override all permissions.'))
-                                    ->formatStateUsing(fn ($state) => boolval($state))
+                                    ->formatStateUsing(fn($state) => boolval($state))
                                     ->reactive(),
                             ]),
                     ],
                     static::getGroupPermissions()->map(
-                        fn ($permissions, $group) => //
+                        fn($permissions, $group) => //
                         Fieldset::make($group . '.fieldset')
                             ->statePath(null)
                             ->label(__('Access') . ' — ' . __(ucwords($group)))
                             ->extraAttributes(['class' => 'text-primary-600'])
                             ->columns(5)
-                            ->visible(fn ($get) => !boolval($get('permissions.god_mode')))
+                            ->visible(fn($get) => !boolval($get('permissions.god_mode')))
                             ->schema($permissions->map(
-                                fn ($permission) => //
+                                fn($permission) => //
                                 Checkbox::make('permissions.' . base64_encode($permission->name))
                                     ->label(__($permission->name))
                                     ->extraAttributes(['class' => 'text-primary-600'])
-                                    ->formatStateUsing(fn ($state) => boolval($state))
+                                    ->formatStateUsing(fn($state) => boolval($state))
                                     ->reactive()
                                     ->afterStateUpdated(function ($component, $get, $set) {
                                         $name = base64_decode(str_replace(
@@ -103,7 +103,7 @@ class RoleResource extends Resource
                                         if ($component->getState() && str_contains($name, '*')) {
                                             static::getGroupPermissions()
                                                 ->get(substr($name, 0, -2))
-                                                ->each(fn ($p) => $set('permissions.' . base64_encode($p->name), true));
+                                                ->each(fn($p) => $set('permissions.' . base64_encode($p->name), true));
                                         }
                                     }),
                             )->toArray()),
@@ -158,7 +158,7 @@ class RoleResource extends Resource
 
                 return implode('', (array) @$matches[0]);
             })
-            ->reject(fn ($permissions, $group) => blank($group));
+            ->reject(fn($permissions, $group) => blank($group));
     }
 
     public static function getPages(): array

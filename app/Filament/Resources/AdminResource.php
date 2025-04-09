@@ -3,7 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\AdminResource\Pages;
-use App\Models\Admin;
+use App\Models\Cms\Admin;
 use Filament\Tables\Actions\EditAction;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\DateTimePicker;
@@ -28,6 +28,7 @@ class AdminResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-users';
 
     protected static ?int $navigationSort = 1;
+    protected static ?string $navigationLabel = 'Admin';
 
     public static function getNavigationGroup(): ?string
     {
